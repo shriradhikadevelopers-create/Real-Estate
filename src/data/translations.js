@@ -144,19 +144,57 @@ const translations = {
       galleryNext: 'Next',
       filmLabel: 'Project Film',
       filmComingSoon: 'Coming Soon',
-      locationLabel: 'Project Location',
+      locationLabel: 'Location',
       locationMap: 'Location Map',
+      locationOpenMaps: 'Open in Maps',
       locationComingSoon: 'Map integration coming soon.',
+      factsLabel: 'Facts',
+      featuresLabel: 'Features',
+      developedBy: 'Developed by',
+      enquireCta: 'Enquire About Project',
+
+      // Video player controls
+      videoPlay: 'Play',
+      videoPause: 'Pause',
+      videoMute: 'Mute',
+      videoUnmute: 'Unmute',
+      videoVolume: 'Volume',
+      videoSpeed: 'Speed',
+      videoFullscreen: 'Fullscreen',
+      videoExitFullscreen: 'Exit Fullscreen',
+      videoPip: 'Picture-in-Picture',
+      videoUnavailable: 'Video unavailable',
+      videoLoading: 'Loading video...',
 
       // Per-project translatable content — keyed by project id (p01, p02, p03, p04)
-      // Structural fields (id, images, mediaViews, etc.) stay in siteData.js
+      // Structural fields (id, facts, media, contact, etc.) stay in siteData.js
       p01: {
-        name: 'Project Name',
-        category: 'Residential Development',
-        location: 'Location',
-        status: 'Completed',
+        name: 'Raghavpuram',
+        category: 'Residential Colony',
+        location: 'Sugar Mill Bypass, Rankhandi Chowki, Deoband',
+        locality: 'Deoband',
+        region: 'Saharanpur, Uttar Pradesh',
+        status: 'Booking Open',
         description:
-          'A selected residential development designed with a focus on quality living and long-term value creation.',
+          'Layout-approved residential colony by the Deoband regulated area.',
+        brand: '',
+        developer: '',
+        tagline: 'Layout-approved residential colony by the Deoband regulated area.',
+        promotionalLine: '',
+        bookingMessage: '',
+        facts: {
+          plotsValue: '67',
+          plotsLabel: 'Residential Plots',
+          roadsValue: '30 ft',
+          roadsLabel: 'Roads',
+        },
+        features: [
+          'Covered gated colony with boundary wall',
+          'Wide roads with proper drainage system',
+          'Lush green, beautiful surroundings',
+          'Just 5 minutes from the railway station',
+          'Streetlight poles available',
+        ],
       },
       p02: {
         name: 'Project Name',
@@ -224,6 +262,12 @@ const translations = {
     enquiry: {
       eyebrow: 'Enquiry',
       headlineLines: ["Let's Start", 'A Conversation.'],
+
+      // Project & Contact
+      projectContextLabel: 'Project',
+      primaryContactLabel: 'Primary Contact',
+      callNow: 'Call Now',
+      additionalContactsLabel: 'Additional Contacts',
 
       // Field labels
       labelName: 'Name *',
@@ -409,19 +453,57 @@ const translations = {
       galleryNext: 'अगला',
       filmLabel: 'प्रोजेक्ट फ़िल्म',
       filmComingSoon: 'जल्द आएगा',
-      locationLabel: 'प्रोजेक्ट स्थान',
+      locationLabel: 'स्थान',
       locationMap: 'स्थान मानचित्र',
+      locationOpenMaps: 'मानचित्र में देखें',
       locationComingSoon: 'मानचित्र एकीकरण शीघ्र उपलब्ध होगा।',
+      factsLabel: 'तथ्य',
+      featuresLabel: 'विशेषताएं',
+      developedBy: 'द्वारा विकसित',
+      enquireCta: 'परियोजना के बारे में पूछताछ करें',
+
+      // Video player controls
+      videoPlay: 'चलाएं',
+      videoPause: 'रोकें',
+      videoMute: 'म्यूट करें',
+      videoUnmute: 'अनम्यूट करें',
+      videoVolume: 'आवाज़',
+      videoSpeed: 'गति',
+      videoFullscreen: 'फुलस्क्रीन',
+      videoExitFullscreen: 'फुलस्क्रीन से बाहर निकलें',
+      videoPip: 'पिक्चर-इन-पिक्चर',
+      videoUnavailable: 'वीडियो अनुपलब्ध है',
+      videoLoading: 'वीडियो लोड हो रहा है...',
 
       // Per-project translatable content — keyed by project id (p01–p04)
-      // Structural fields (id, images, mediaViews, etc.) stay in siteData.js
+      // Structural fields (id, facts, media, contact, etc.) stay in siteData.js
       p01: {
-        name: 'परियोजना का नाम',
-        category: 'आवासीय विकास',
-        location: 'स्थान',
-        status: 'पूर्ण',
+        name: 'राघवपुरम',
+        category: 'आवासीय कॉलोनी',
+        location: 'शुगर मिल बाईपास, रणखण्डी पुलिस चौकी के सामने, निकट रूप गार्डन, देवबन्द',
+        locality: 'देवबंद',
+        region: 'सहारनपुर, उत्तर प्रदेश',
+        status: 'बुकिंग खुली है',
         description:
-          'गुणवत्तापूर्ण जीवन और दीर्घकालिक मूल्य निर्माण पर केंद्रित एक चयनित आवासीय विकास परियोजना।',
+          'देवबन्द विनियमित क्षेत्र द्वारा लेआउट स्वीकृत आवासीय कॉलोनी',
+        brand: '',
+        developer: '',
+        tagline: 'देवबन्द विनियमित क्षेत्र द्वारा लेआउट स्वीकृत आवासीय कॉलोनी',
+        promotionalLine: '',
+        bookingMessage: '',
+        facts: {
+          plotsValue: '67',
+          plotsLabel: 'आवासीय प्लॉट्स',
+          roadsValue: '30 फीट',
+          roadsLabel: 'सड़कें',
+        },
+        features: [
+          'बाउण्ड्री वॉल द्वारा कवर्ड गेटेड कॉलोनी',
+          'चौड़ी सड़कें एवं नाली द्वारा जल निकासी',
+          'हरा-भरा सुंदर वातावरण',
+          'रेलवे स्टेशन से मात्र 5 मिनट की दूरी',
+          'लाइट पोल की सुविधा उपलब्ध',
+        ],
       },
       p02: {
         name: 'परियोजना का नाम',
@@ -487,6 +569,12 @@ const translations = {
     enquiry: {
       eyebrow: 'पूछताछ',
       headlineLines: ['एक बातचीत', 'शुरू करें।'],
+
+      // Project & Contact
+      projectContextLabel: 'परियोजना',
+      primaryContactLabel: 'प्राथमिक संपर्क',
+      callNow: 'अभी कॉल करें',
+      additionalContactsLabel: 'अन्य संपर्क',
 
       // Field labels
       labelName: 'नाम *',

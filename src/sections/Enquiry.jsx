@@ -7,9 +7,20 @@ import { useTranslation } from '../hooks/useTranslation'
 
 gsap.registerPlugin(ScrollTrigger)
 
-function Enquiry() {
+function Enquiry({ project }) {
   const containerRef = useRef(null)
-  const { t, tArray } = useTranslation()
+  const { t, tArray, language } = useTranslation()
+
+  const phones = Array.isArray(project?.contact?.phones) ? project.contact.phones : []
+  const hasPhones = phones.length > 0
+  const primaryPhone = hasPhones ? phones[0] : null
+  const secondaryPhones = hasPhones ? phones.slice(1) : []
+
+  const projectName = project
+    ? (language === 'hi' && t(`projects.p${project.id}.name`) !== `projects.p${project.id}.name`
+        ? t(`projects.p${project.id}.name`)
+        : project.name)
+    : null
 
   // Maps each English interest value (used as <option value=>, sent to backend)
   // to its translated display label. Backend payload is always the English string.
@@ -198,6 +209,7 @@ function Enquiry() {
           phone: formData.phone,
           interest: formData.interest || 'Not Specified',
           message: formData.message || 'No message provided',
+          project: projectName || 'General Enquiry',
           from_name: 'Shri Radhika Developers Website',
           subject: `New Enquiry from Shri Radhika Developers Website — ${formData.name}`
         })
@@ -253,6 +265,64 @@ function Enquiry() {
 
         {/* Form Container */}
         <div className="enquiry-form-container max-w-2xl">
+          {/* Project Direct Phone Contacts */}
+          {hasPhones && (
+            <div className="enquiry-project-contact mb-8 md:mb-12 pb-6 md:pb-8 border-b border-neutral/20">
+              {projectName && (
+                <div className="mb-4">
+                  <p className="eyebrow text-accent font-medium mb-1">
+                    {t('enquiry.projectContextLabel')}
+                  </p>
+                  <h3 className="font-display text-2xl sm:text-3xl text-black font-normal">
+                    {projectName}
+                  </h3>
+                </div>
+              )}
+
+              {/* Primary Contact */}
+              <div className="mb-4">
+                <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-neutral/60 mb-1.5">
+                  {t('enquiry.primaryContactLabel')}
+                </p>
+                <div className="flex flex-wrap items-baseline gap-3 sm:gap-4">
+                  <a
+                    href={`tel:${primaryPhone}`}
+                    className="enquiry-primary-phone font-display text-2xl sm:text-3xl md:text-4xl text-black hover:text-accent transition-colors font-normal tracking-wide"
+                  >
+                    {primaryPhone}
+                  </a>
+                  <a
+                    href={`tel:${primaryPhone}`}
+                    className="inline-flex items-center gap-1 font-body text-xs tracking-[0.14em] uppercase text-accent hover:text-black transition-colors"
+                  >
+                    <span>{t('enquiry.callNow')}</span>
+                    <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Secondary Contacts */}
+              {secondaryPhones.length > 0 && (
+                <div className="pt-3 border-t border-neutral/10">
+                  <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-neutral/50 mb-2">
+                    {t('enquiry.additionalContactsLabel')}
+                  </p>
+                  <div className="flex flex-wrap gap-x-6 gap-y-2">
+                    {secondaryPhones.map((phone) => (
+                      <a
+                        key={phone}
+                        href={`tel:${phone}`}
+                        className="enquiry-secondary-phone font-mono text-sm sm:text-base text-neutral/70 hover:text-black transition-colors"
+                      >
+                        {phone}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {status === 'success' ? (
             <div className="py-12 border-t border-black/10">
               <h3 className="font-display text-2xl md:text-3xl font-medium text-black mb-4">

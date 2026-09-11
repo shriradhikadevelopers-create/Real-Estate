@@ -6,6 +6,8 @@ import { CustomEase } from 'gsap/CustomEase'
 import { useGSAP } from '@gsap/react'
 import { getPostPhilosophyStart } from '../utils/animations'
 import { useTranslation } from '../hooks/useTranslation'
+import ProjectVideoPlayer from '../components/video/ProjectVideoPlayer'
+import ProjectLocationMap from '../components/map/ProjectLocationMap'
 
 gsap.registerPlugin(ScrollTrigger, CustomEase)
 CustomEase.create('premiumReveal', '0.22, 1, 0.36, 1')
@@ -18,14 +20,13 @@ function restoreInactiveProjectMedia(article) {
   const wrappers = article.querySelectorAll('.project-image-wrapper, .project-image-inner, .project-media-layer')
 
   media.forEach((el) => {
-    if (el.closest('.project-placeholder-media, .project-gallery-frame')) return
-    gsap.killTweensOf(el)
-    gsap.set(el, {
+    if (el.closest('.project-placeholder-media, .project-gallery-frame, .project-video-container, .project-location-view')) return
+    gsap.killTweensOf(el, 'filter')
+    gsap.to(el, {
       filter: INACTIVE_PROJECT_FILTER,
-      opacity: 1,
-      mixBlendMode: 'normal',
-      boxShadow: 'none',
-      backdropFilter: 'none',
+      duration: 0.4,
+      ease: 'power2.out',
+      overwrite: 'auto',
     })
   })
 
@@ -64,14 +65,10 @@ function syncProjectMediaFilter(article, isFocused) {
 
   const media = article.querySelectorAll('.project-desktop-image-inner .project-image, .project-mobile-image-inner .project-image')
   media.forEach((el) => {
-    if (el.closest('.project-placeholder-media, .project-gallery-frame')) return
-    gsap.killTweensOf(el)
+    if (el.closest('.project-placeholder-media, .project-gallery-frame, .project-video-container, .project-location-view')) return
+    gsap.killTweensOf(el, 'filter')
     gsap.set(el, {
       filter: isFocused ? ACTIVE_PROJECT_FILTER : INACTIVE_PROJECT_FILTER,
-      opacity: 1,
-      mixBlendMode: 'normal',
-      boxShadow: 'none',
-      backdropFilter: 'none',
     })
   })
 }
@@ -92,29 +89,13 @@ function applyProjectFocusState(container, activeIndex, isActive) {
       media.forEach((el) => {
         if (el.closest('.project-placeholder-media, .project-gallery-frame')) return
 
-        gsap.killTweensOf(el)
-
-        gsap.set(el, {
-          opacity: 1,
-          mixBlendMode: 'normal',
-          boxShadow: 'none',
-          backdropFilter: 'none',
-        })
+        gsap.killTweensOf(el, 'filter')
 
         gsap.to(el, {
           filter: ACTIVE_PROJECT_FILTER,
           duration: 0.55,
           ease: 'power2.out',
-          overwrite: true,
-          onComplete: () => {
-            gsap.set(el, {
-              filter: ACTIVE_PROJECT_FILTER,
-              opacity: 1,
-              mixBlendMode: 'normal',
-              boxShadow: 'none',
-              backdropFilter: 'none',
-            })
-          },
+          overwrite: 'auto',
         })
       })
     }
@@ -132,7 +113,7 @@ function applyProjectFocusState(container, activeIndex, isActive) {
   })
 }
 
-function Projects({ isActive = false, activeIndex = 0 }) {
+function Projects({ isActive = false, activeIndex = 0, onSelectProject }) {
   const containerRef = useRef(null)
   const cursorRef = useRef(null)
   const projectProgressWrapRef = useRef(null)
@@ -161,13 +142,26 @@ function Projects({ isActive = false, activeIndex = 0 }) {
   const pendingLayerEnterRef = useRef({})
   const mediaSwapTweenRef = useRef({})
 
-  const { t } = useTranslation()
+  const { t, tArray } = useTranslation()
+
+  const [isDesktop, setIsDesktop] = useState(
+    typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : true
+  )
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mq = window.matchMedia('(min-width: 768px)')
+    const onChange = (e) => setIsDesktop(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
 
   // Resolves translatable text for a specific project using project.id as the key.
   // project.id values are "01", "02", "03", "04" — mapped to p01, p02, p03, p04.
   // Only text fields (name, category, location, status, description) are resolved.
-  // All structural data (images, mediaViews, etc.) always comes from siteData directly.
+  // All structural data (facts, media, contact, etc.) always comes from siteData directly.
   const tp = (projectId, field) => t(`projects.p${projectId}.${field}`)
+  const tpArray = (projectId, field) => tArray(`projects.p${projectId}.${field}`)
 
   useEffect(() => {
     applyProjectFocusState(containerRef.current, activeIndex, isActive)
@@ -373,8 +367,8 @@ const view = isDesktop
           const curtainTl = gsap.timeline({
             scrollTrigger: {
               id: `projects-desktop-curtain-${index}`,
-              trigger: imageWrapper,
-              start: getPostPhilosophyStart('top 75%'),
+              trigger: index === 0 ? article : imageWrapper,
+              start: index === 0 ? getPostPhilosophyStart('top 85%') : getPostPhilosophyStart('top 75%'),
               toggleActions: 'play none none none',
               invalidateOnRefresh: true,
             }
@@ -533,7 +527,7 @@ const view = isDesktop
             scrollTrigger: {
               id: `projects-mobile-number-${index}`,
               trigger: article,
-              start: index === 0 ? 'top 25%' : getPostPhilosophyStart('top 92%'),
+              start: index === 0 ? getPostPhilosophyStart('top 65%') : getPostPhilosophyStart('top 92%'),
               toggleActions: 'play none none none',
               invalidateOnRefresh: true,
             }
@@ -551,7 +545,7 @@ const view = isDesktop
             scrollTrigger: {
               id: `projects-mobile-meta-${index}`,
               trigger: article,
-              start: index === 0 ? 'top 22%' : getPostPhilosophyStart('top 88%'),
+              start: index === 0 ? getPostPhilosophyStart('top 62%') : getPostPhilosophyStart('top 88%'),
               toggleActions: 'play none none none',
               invalidateOnRefresh: true,
             }
@@ -564,8 +558,8 @@ const view = isDesktop
           const curtainTl = gsap.timeline({
             scrollTrigger: {
               id: `projects-mobile-curtain-${index}`,
-              trigger: imageWrapper,
-              start: index === 0 ? 'top 20%' : getPostPhilosophyStart('top 75%'),
+              trigger: index === 0 ? article : imageWrapper,
+              start: index === 0 ? getPostPhilosophyStart('top 60%') : getPostPhilosophyStart('top 75%'),
               toggleActions: 'play none none none',
               invalidateOnRefresh: true,
             }
@@ -735,8 +729,8 @@ const view = isDesktop
   // Helper: get active media item for a project
   const getActiveMediaItem = (project) => {
     const idx = activeMedia[project.id] || 0
-    if (project.media && project.media.length > 0) {
-      return project.media[idx]
+    if (Array.isArray(project.media?.gallery) && project.media.gallery.length > 0) {
+      return project.media.gallery[idx]
     }
     return null
   }
@@ -749,33 +743,35 @@ const view = isDesktop
   }
 
   const getMobileView = (project, view) => {
-    const mediaViews = project.mediaViews || {}
-    return mediaViews[view] || mediaViews.overview || project.media?.[0] || null
+    const media = project.media || {}
+    if (view === 'overview') return media.overview || null
+    if (view === 'gallery') return media.gallery || []
+    if (view === 'film') return media.videos?.[0] || null
+    if (view === 'location') return media.location || null
+    return media[view] || media.overview || null
   }
 
   const getDesktopMediaItem = (project, view, galleryIndex = 0) => {
-  const mediaViews = project.mediaViews || {}
+    const media = project.media || {}
 
-  if (view === 'gallery') {
-    const gallery = mediaViews.gallery
+    if (view === 'gallery') {
+      const gallery = media.gallery
 
-    if (Array.isArray(gallery) && gallery.length > 0) {
-      const index = Math.min(
-        galleryIndex,
-        gallery.length - 1
-      )
+      if (Array.isArray(gallery) && gallery.length > 0) {
+        const index = Math.min(
+          galleryIndex,
+          gallery.length - 1
+        )
 
-      return gallery[index]
+        return gallery[index]
+      }
     }
-  }
 
-  return (
-    mediaViews[view] ||
-    mediaViews.overview ||
-    project.media?.[0] ||
-    null
-  )
-}
+    if (view === 'film') return media.videos?.[0] || null
+    if (view === 'location') return media.location || null
+
+    return media[view] || media.overview || null
+  }
 
   const renderMediaItem = (item, project, className = '') => {
     if (!item) {
@@ -813,8 +809,63 @@ const view = isDesktop
           <p className="eyebrow text-neutral/50 mb-2">{item.label}</p>
           <p className="font-body text-xs leading-relaxed text-neutral/45">
             {item.type === 'location'
-              ? project.locationMedia?.description || 'Location media coming soon'
+              ? project.media?.location?.description || 'Location media coming soon'
               : 'Media coming soon'}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  const renderLocationView = (project, content) => {
+    const hasRealLocation =
+      project.id === '01' ||
+      (project.media?.location?.address && project.media.location.address !== 'Location')
+
+    if (hasRealLocation) {
+      const locality =
+        tp(project.id, 'locality') !== `projects.p${project.id}.locality`
+          ? tp(project.id, 'locality')
+          : (project.media?.location?.address?.split(',')?.[0]?.trim() || 'Deoband')
+
+      const region =
+        tp(project.id, 'region') !== `projects.p${project.id}.region`
+          ? tp(project.id, 'region')
+          : (project.media?.location?.address?.split(',')?.slice(1)?.join(',')?.trim() || 'Saharanpur, Uttar Pradesh')
+
+      const projectName =
+        tp(project.id, 'name') !== `projects.p${project.id}.name`
+          ? tp(project.id, 'name')
+          : project.name
+
+      const mapsUrl = project.media?.location?.mapsUrl || null
+
+      return (
+        <ProjectLocationMap
+          coordinates={project.media?.location?.coordinates}
+          locality={locality}
+          region={region}
+          projectName={projectName}
+          mapsUrl={mapsUrl}
+        />
+      )
+    }
+
+    // Projects 02–04 fallback placeholder
+    return (
+      <div className="project-placeholder-media project-location-placeholder">
+        <div className="project-placeholder-overlay">
+          <p className="eyebrow text-ivory/70">
+            {t('projects.locationLabel')}
+          </p>
+          <p className="font-display text-2xl text-ivory">
+            {t('projects.locationMap')}
+          </p>
+          <p className="eyebrow text-ivory/70">
+            {tp(project.id, 'location')}
+          </p>
+          <p className="font-body text-xs leading-relaxed text-ivory/65 max-w-[15rem]">
+            {t('projects.locationComingSoon')}
           </p>
         </div>
       </div>
@@ -824,66 +875,98 @@ const view = isDesktop
   const renderMobileView = (project, view, galleryIndex = 0) => {
     const content = getMobileView(project, view)
 
-    if (view === 'gallery' && Array.isArray(content)) {
-      const activeIndex = Math.min(galleryIndex, content.length - 1)
+    if (view === 'gallery') {
+      if (Array.isArray(content) && content.length > 0) {
+        const activeIndex = Math.min(galleryIndex, content.length - 1)
 
-      return (
-        <div
-          className="project-gallery-stage"
-          data-gallery-project-id={project.id}
-          onTouchStart={(event) => handleGalleryTouchStart(project.id, event)}
-          onTouchEnd={(event) => handleGalleryTouchEnd(project.id, content.length, event)}
-        >
-          {content.map((item, index) => (
-            <figure
-              key={`${item.src}-${index}`}
-              className={`project-gallery-frame ${index === activeIndex ? 'active' : ''}`}
-              data-gallery-index={index}
-            >
-              {renderMediaItem(item, project)}
-              <figcaption>
-                {String(activeIndex + 1).padStart(2, '0')} / {String(content.length).padStart(2, '0')}
-              </figcaption>
-            </figure>
-          ))}
-          <div className="project-gallery-controls">
-            <button
-              type="button"
-              onClick={() => handleGalleryChange(project.id, content.length, activeIndex - 1)}
-              aria-label="Previous gallery image"
-            >
-              {t('projects.galleryPrev')}
-            </button>
-            <div className="project-gallery-dots" aria-label="Gallery image selection">
-              {content.map((item, index) => (
-                <button
-                  key={`${item.src}-dot`}
-                  type="button"
-                  onClick={() => handleGalleryChange(project.id, content.length, index)}
-                  className={index === activeIndex ? 'active' : ''}
-                  aria-label={`Show gallery image ${index + 1}`}
-                  aria-pressed={index === activeIndex}
-                />
-              ))}
+        return (
+          <div
+            className="project-gallery-stage"
+            data-gallery-project-id={project.id}
+            onTouchStart={(event) => handleGalleryTouchStart(project.id, event)}
+            onTouchEnd={(event) => handleGalleryTouchEnd(project.id, content.length, event)}
+          >
+            {content.map((item, index) => (
+              <figure
+                key={`${item.src}-${index}`}
+                className={`project-gallery-frame ${index === activeIndex ? 'active' : ''}`}
+                data-gallery-index={index}
+              >
+                {renderMediaItem(item, project)}
+                <figcaption>
+                  {String(activeIndex + 1).padStart(2, '0')} / {String(content.length).padStart(2, '0')}
+                </figcaption>
+              </figure>
+            ))}
+            <div className="project-gallery-controls">
+              <button
+                type="button"
+                onClick={() => handleGalleryChange(project.id, content.length, activeIndex - 1)}
+                aria-label="Previous gallery image"
+              >
+                {t('projects.galleryPrev')}
+              </button>
+              <div className="project-gallery-dots" aria-label="Gallery image selection">
+                {content.map((item, index) => (
+                  <button
+                    key={`${item.src}-dot`}
+                    type="button"
+                    onClick={() => handleGalleryChange(project.id, content.length, index)}
+                    className={index === activeIndex ? 'active' : ''}
+                    aria-label={`Show gallery image ${index + 1}`}
+                    aria-pressed={index === activeIndex}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => handleGalleryChange(project.id, content.length, activeIndex + 1)}
+                aria-label="Next gallery image"
+              >
+                {t('projects.galleryNext')}
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => handleGalleryChange(project.id, content.length, activeIndex + 1)}
-              aria-label="Next gallery image"
-            >
-              {t('projects.galleryNext')}
-            </button>
+          </div>
+        )
+      }
+
+      const posterSrc = project.media?.overview?.src
+      return (
+        <div className="project-placeholder-media project-film-placeholder">
+          {posterSrc && (
+            <img
+              src={posterSrc}
+              alt={`${project.name} gallery`}
+              className="project-image"
+            />
+          )}
+          <div className="project-placeholder-overlay">
+            <p className="eyebrow text-ivory/70">{t('projects.mediaGallery')}</p>
+            <p className="font-display text-2xl text-ivory">{t('projects.filmComingSoon')}</p>
           </div>
         </div>
       )
     }
 
     if (view === 'film') {
+      if (content?.src) {
+        if (isDesktop) return null
+        return (
+          <ProjectVideoPlayer
+            src={content.src}
+            poster={content.poster}
+            title={`${tp(project.id, 'name')} — ${t('projects.filmLabel')}`}
+            isActiveTab={view === 'film'}
+          />
+        )
+      }
+
+      const posterSrc = content?.poster || project.media?.overview?.src
       return (
         <div className="project-placeholder-media project-film-placeholder">
-          {content?.poster && (
+          {posterSrc && (
             <img
-              src={content.poster}
+              src={posterSrc}
               alt={`${project.name} film poster`}
               className="project-image"
             />
@@ -898,26 +981,7 @@ const view = isDesktop
     }
 
     if (view === 'location') {
-      return (
-        <div className="project-placeholder-media project-location-placeholder">
-          {content?.placeholderImage && (
-            <img
-              src={content.placeholderImage}
-              alt={`${project.name} location placeholder`}
-              className="project-image"
-            />
-          )}
-          <div className="project-map-grid" aria-hidden="true" />
-          <div className="project-placeholder-overlay">
-            <p className="eyebrow text-ivory/70">{t('projects.locationLabel')}</p>
-            <p className="font-display text-2xl text-ivory">{t('projects.locationMap')}</p>
-            <p className="eyebrow text-ivory/70">{tp(project.id, 'location')}</p>
-            <p className="font-body text-xs leading-relaxed text-ivory/65 max-w-[15rem]">
-              {content?.description || t('projects.locationComingSoon')}
-            </p>
-          </div>
-        </div>
-      )
+      return renderLocationView(project, content)
     }
 
     return renderMediaItem(content, project)
@@ -932,79 +996,98 @@ const view = isDesktop
   }
 
   // Gallery
-  if (view === 'gallery' && Array.isArray(content)) {
-    const activeIndex = Math.min(
-      galleryIndex,
-      content.length - 1
-    )
+  if (view === 'gallery') {
+    if (Array.isArray(content) && content.length > 0) {
+      const activeIndex = Math.min(
+        galleryIndex,
+        content.length - 1
+      )
 
-    return (
-      <div
-        className="project-gallery-desktop-shell"
-        data-gallery-project-id={project.id}
-      >
-        <div className="project-gallery-desktop-main">
-          <div className="project-gallery-desktop-main-media">
-            {renderMediaItem(
-              content[activeIndex],
-              project,
-              'project-gallery-desktop-main-image'
-            )}
-          </div>
+      return (
+        <div
+          className="project-gallery-desktop-shell"
+          data-gallery-project-id={project.id}
+        >
+          <div className="project-gallery-desktop-main">
+            <div className="project-gallery-desktop-main-media">
+              {renderMediaItem(
+                content[activeIndex],
+                project,
+                'project-gallery-desktop-main-image'
+              )}
+            </div>
 
-          <div className="project-gallery-desktop-bottom-overlay" aria-hidden="true" />
+            <div className="project-gallery-desktop-bottom-overlay" aria-hidden="true" />
 
-          <div className="project-gallery-desktop-counter">
-            {String(activeIndex + 1).padStart(2, '0')} /{' '}
-            {String(content.length).padStart(2, '0')}
-          </div>
+            <div className="project-gallery-desktop-counter">
+              {String(activeIndex + 1).padStart(2, '0')} /{' '}
+              {String(content.length).padStart(2, '0')}
+            </div>
 
-          <div
-            className="project-gallery-desktop-rail"
-            aria-label="Project gallery preview list"
-          >
-            {content.map((item, index) => {
-              const isActive = index === activeIndex
+            <div
+              className="project-gallery-desktop-rail"
+              aria-label="Project gallery preview list"
+            >
+              {content.map((item, index) => {
+                const isActive = index === activeIndex
 
-              return (
-                <button
-                  key={`${item.src}-${index}`}
-                  type="button"
-                  onClick={() =>
-                    handleGalleryChange(
-                      project.id,
-                      content.length,
-                      index
-                    )
-                  }
-                  className={`project-gallery-desktop-preview ${
-                    isActive ? 'active' : ''
-                  }`}
-                  aria-label={`Show gallery image ${index + 1}`}
-                  aria-pressed={isActive}
-                >
-                  <span className="project-gallery-desktop-preview-index">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
+                return (
+                  <button
+                    key={`${item.src}-${index}`}
+                    type="button"
+                    onClick={() =>
+                      handleGalleryChange(
+                        project.id,
+                        content.length,
+                        index
+                      )
+                    }
+                    className={`project-gallery-desktop-preview ${
+                      isActive ? 'active' : ''
+                    }`}
+                    aria-label={`Show gallery image ${index + 1}`}
+                    aria-pressed={isActive}
+                  >
+                    <span className="project-gallery-desktop-preview-index">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
 
-                  <span className="project-gallery-desktop-preview-figure">
-                    {renderMediaItem(
-                      item,
-                      project,
-                      'project-gallery-desktop-preview-image'
+                    <span className="project-gallery-desktop-preview-figure">
+                      {renderMediaItem(
+                        item,
+                        project,
+                        'project-gallery-desktop-preview-image'
+                      )}
+                    </span>
+
+                    {isActive && (
+                      <span
+                        className="project-gallery-desktop-preview-indicator"
+                        aria-hidden="true"
+                      />
                     )}
-                  </span>
-
-                  {isActive && (
-                    <span
-                      className="project-gallery-desktop-preview-indicator"
-                      aria-hidden="true"
-                    />
-                  )}
-                </button>
-              )
-            })}
+                  </button>
+                )
+              })}
+            </div>
           </div>
+        </div>
+      )
+    }
+
+    const posterSrc = project.media?.overview?.src
+    return (
+      <div className="project-placeholder-media project-film-placeholder">
+        {posterSrc && (
+          <img
+            src={posterSrc}
+            alt={`${project.name} gallery`}
+            className="project-image"
+          />
+        )}
+        <div className="project-placeholder-overlay">
+          <p className="eyebrow text-ivory/70">{t('projects.mediaGallery')}</p>
+          <p className="font-display text-2xl text-ivory">{t('projects.filmComingSoon')}</p>
         </div>
       </div>
     )
@@ -1012,11 +1095,24 @@ const view = isDesktop
 
   // Video
   if (view === 'film') {
+    if (content?.src) {
+      if (!isDesktop) return null
+      return (
+        <ProjectVideoPlayer
+          src={content.src}
+          poster={content.poster}
+          title={`${tp(project.id, 'name')} — ${t('projects.filmLabel')}`}
+          isActiveTab={view === 'film'}
+        />
+      )
+    }
+
+    const posterSrc = content?.poster || project.media?.overview?.src
     return (
       <div className="project-placeholder-media project-film-placeholder">
-        {content?.poster && (
+        {posterSrc && (
           <img
-            src={content.poster}
+            src={posterSrc}
             alt={`${project.name} film poster`}
             className="project-image"
           />
@@ -1042,41 +1138,7 @@ const view = isDesktop
 
   // Location
   if (view === 'location') {
-    return (
-      <div className="project-placeholder-media project-location-placeholder">
-        {content?.placeholderImage && (
-          <img
-            src={content.placeholderImage}
-            alt={`${project.name} location placeholder`}
-            className="project-image"
-          />
-        )}
-
-        <div
-          className="project-map-grid"
-          aria-hidden="true"
-        />
-
-        <div className="project-placeholder-overlay">
-          <p className="eyebrow text-ivory/70">
-            {t('projects.locationLabel')}
-          </p>
-
-          <p className="font-display text-2xl text-ivory">
-            {t('projects.locationMap')}
-          </p>
-
-          <p className="eyebrow text-ivory/70">
-            {tp(project.id, 'location')}
-          </p>
-
-          <p className="font-body text-xs leading-relaxed text-ivory/65 max-w-[15rem]">
-            {content?.description ||
-              t('projects.locationComingSoon')}
-          </p>
-        </div>
-      </div>
-    )
+    return renderLocationView(project, content)
   }
 
   return renderMediaItem(content, project)
@@ -1121,24 +1183,58 @@ const view = isDesktop
             {projects.map((project, projectIndex) => {
               const activeIdx = activeMedia[project.id] || 0
 
-const desktopView =
-  activeDesktopView[project.id] || 'overview'
+              const desktopView =
+                activeDesktopView[project.id] || 'overview'
 
-const mobileView =
-  activeMobileView[project.id] || 'overview'
+              const mobileView =
+                activeMobileView[project.id] || 'overview'
 
-const galleryIndex =
-  activeGallery[project.id] || 0
+              const galleryIndex =
+                activeGallery[project.id] || 0
 
+              const mediaOptions = [
+                ['overview', t('projects.mediaOverview')],
+                ['gallery', t('projects.mediaGallery')],
+                ['film', t('projects.mediaFilm')],
+                ['location', t('projects.mediaLocation')],
+              ]
 
-const mediaOptions = [
-  ['overview', t('projects.mediaOverview')],
-  ['gallery', t('projects.mediaGallery')],
-  ['film', t('projects.mediaFilm')],
-  ['location', t('projects.mediaLocation')],
-]
+              const mobileOptions = mediaOptions
 
-const mobileOptions = mediaOptions
+              // Step 2 Data Integration
+              const hasFacts = Boolean(project.facts && project.facts.totalPlots)
+              const plotsVal = tp(project.id, 'facts.plotsValue') !== `projects.p${project.id}.facts.plotsValue`
+                ? tp(project.id, 'facts.plotsValue')
+                : (project.facts?.totalPlots?.split(' ')?.[0] || '57')
+              const plotsLabel = tp(project.id, 'facts.plotsLabel') !== `projects.p${project.id}.facts.plotsLabel`
+                ? tp(project.id, 'facts.plotsLabel')
+                : (project.facts?.totalPlots?.split(' ')?.slice(1)?.join(' ') || 'Commercial Plots')
+              const roadsVal = tp(project.id, 'facts.roadsValue') !== `projects.p${project.id}.facts.roadsValue`
+                ? tp(project.id, 'facts.roadsValue')
+                : (project.facts?.roadWidth?.split(' ')?.slice(0, 2)?.join(' ') || '30 ft')
+              const roadsLabel = tp(project.id, 'facts.roadsLabel') !== `projects.p${project.id}.facts.roadsLabel`
+                ? tp(project.id, 'facts.roadsLabel')
+                : (project.facts?.roadWidth?.split(' ')?.slice(2)?.join(' ') || 'Roads')
+
+              const transFeatures = tpArray(project.id, 'features')
+              const features = (Array.isArray(transFeatures) && transFeatures.length > 0)
+                ? transFeatures
+                : (project.features || [])
+              const hasFeatures = features.length > 0
+
+              const brand = tp(project.id, 'brand') !== `projects.p${project.id}.brand`
+                ? tp(project.id, 'brand')
+                : (project.brand || '')
+              const developer = tp(project.id, 'developer') !== `projects.p${project.id}.developer`
+                ? tp(project.id, 'developer')
+                : (project.developer || '')
+              const tagline = tp(project.id, 'tagline') !== `projects.p${project.id}.tagline`
+                ? tp(project.id, 'tagline')
+                : (project.overview?.tagline || '')
+              const promotionalLine = tp(project.id, 'promotionalLine') !== `projects.p${project.id}.promotionalLine`
+                ? tp(project.id, 'promotionalLine')
+                : (project.overview?.promotionalLine || '')
+              const hasOverviewContent = Boolean(tagline || promotionalLine)
 
               return (
                 <article
@@ -1190,29 +1286,73 @@ const mobileOptions = mediaOptions
                         </p>
                       </div>
 
-                      {/* Media Selector (Desktop) */}
-<div className="project-media-nav hidden md:flex flex-wrap gap-4 mt-8 pt-6 border-t border-neutral/20">
-  {mediaOptions.map(([view, label], idx) => (
-    <button
-      key={view}
-      type="button"
-      onClick={() =>
-        handleDesktopViewChange(project.id, view)
-      }
-      className={`media-selector-item ${
-        desktopView === view ? 'active' : ''
-      }`}
-      disabled={mediaTransitioning[project.id]}
-      aria-pressed={desktopView === view}
-    >
-      <span className="text-neutral/60 mr-1.5">
-        0{idx + 1}
-      </span>
+                      {/* Facts Block */}
+                      {hasFacts && (
+                        <div className="project-facts-block mt-6 pt-5 border-t border-neutral/20">
+                          <p className="eyebrow text-neutral/60 mb-3">{t('projects.factsLabel')}</p>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <span className="font-display text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-normal text-black block leading-none mb-1">
+                                {plotsVal}
+                              </span>
+                              <span className="font-body text-[11px] tracking-[0.14em] uppercase text-neutral/70 block">
+                                {plotsLabel}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="font-display text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-normal text-black block leading-none mb-1">
+                                {roadsVal}
+                              </span>
+                              <span className="font-body text-[11px] tracking-[0.14em] uppercase text-neutral/70 block">
+                                {roadsLabel}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
-      {label}
-    </button>
-  ))}
-</div>
+                      {/* Enquire CTA (Desktop) */}
+                      <div className="project-enquiry-action hidden md:block mt-6 pt-5 border-t border-neutral/20">
+                        <a
+                          href="#contact"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            if (onSelectProject) {
+                              onSelectProject(project.id)
+                            } else {
+                              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+                            }
+                          }}
+                          className="inline-flex items-center gap-2 font-body text-xs tracking-[0.16em] uppercase text-accent hover:text-black transition-colors group"
+                        >
+                          <span>{t('projects.enquireCta')}</span>
+                          <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">→</span>
+                        </a>
+                      </div>
+
+                      {/* Media Selector (Desktop) */}
+                      <div className="project-media-nav hidden md:flex flex-wrap gap-4 mt-6 pt-6 border-t border-neutral/20">
+                        {mediaOptions.map(([view, label], idx) => (
+                          <button
+                            key={view}
+                            type="button"
+                            onClick={() =>
+                              handleDesktopViewChange(project.id, view)
+                            }
+                            className={`media-selector-item ${
+                              desktopView === view ? 'active' : ''
+                            }`}
+                            disabled={mediaTransitioning[project.id]}
+                            aria-pressed={desktopView === view}
+                          >
+                            <span className="text-neutral/60 mr-1.5">
+                              0{idx + 1}
+                            </span>
+
+                            {label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
                     {/* Project Media Column */}
@@ -1232,26 +1372,26 @@ const mobileOptions = mediaOptions
                               aria-pressed={mobileView === view}
                               disabled={mediaTransitioning[project.id]}
                             >
-                              <span>0{idx + 1}</span>
-                              {label}
+                              <span className="project-mobile-nav-index">0{idx + 1}</span>
+                              <span className="project-mobile-nav-label">{label}</span>
                             </button>
                           ))}
                         </div>
                       </div>
 
                       {/* Main Image/Media Area */}
-                      <div className={`project-image-wrapper project-media-${mobileView} aspect-[3/4] sm:aspect-[4/5] md:aspect-[3/2] bg-neutral/10 overflow-hidden relative`}>
+                      <div className="project-image-wrapper relative aspect-[4/3] md:aspect-[16/10] overflow-hidden">
                         <div className="project-curtain" />
 
                         <div className="project-image-inner project-desktop-image-inner absolute inset-0 hidden md:block">
-  <div className="project-media-layer h-full">
-    {renderDesktopView(
-      project,
-      desktopView,
-      galleryIndex
-    )}
-  </div>
-</div>
+                          <div className="project-media-layer h-full">
+                            {renderDesktopView(
+                              project,
+                              desktopView,
+                              galleryIndex
+                            )}
+                          </div>
+                        </div>
 
                         <div className="project-image-inner project-mobile-image-inner absolute inset-0 md:hidden">
                           <div className="project-media-layer h-full">
@@ -1260,16 +1400,90 @@ const mobileOptions = mediaOptions
                         </div>
                       </div>
 
+                      {/* Overview Marketing Content Block */}
+                      {hasOverviewContent && (
+                        <div
+                          className={`project-overview-content pt-6 pb-2 transition-opacity duration-300 ${
+                            desktopView === 'overview' ? 'md:block' : 'md:hidden'
+                          } ${
+                            mobileView === 'overview' ? 'block' : 'hidden'
+                          }`}
+                        >
+                          <div className="space-y-3">
+                            <div>
+                              {brand && (
+                                <p className="font-mono text-xs uppercase tracking-[0.18em] text-black/80 font-medium">
+                                  {brand}
+                                </p>
+                              )}
+                              {developer && (
+                                <p className="font-body text-xs tracking-[0.08em] text-neutral/70 mt-1">
+                                  {t('projects.developedBy')} {developer}
+                                </p>
+                              )}
+                            </div>
+                            {tagline && (
+                              <p className="font-display text-xl sm:text-2xl md:text-2xl lg:text-3xl text-black font-normal leading-snug max-w-xl">
+                                {tagline}
+                              </p>
+                            )}
+                            {promotionalLine && (
+                              <p className="font-body text-sm sm:text-base text-neutral/80 leading-relaxed max-w-lg">
+                                {promotionalLine}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
                       {/* Mobile Description */}
                       <div className="project-mobile-desc md:hidden pt-5">
-                        <p className="body-copy">
-                          {tp(project.id, 'description')}
-                        </p>
+                        {(!hasOverviewContent || mobileView !== 'overview') && (
+                          <p className="body-copy">
+                            {tp(project.id, 'description')}
+                          </p>
+                        )}
                         <div className="project-mobile-facts">
                           <span>{tp(project.id, 'location')}</span>
                           <span>{tp(project.id, 'status')}</span>
                         </div>
                       </div>
+
+                      {/* Enquire CTA (Mobile) */}
+                      <div className="project-mobile-enquiry md:hidden pt-4 pb-2">
+                        <a
+                          href="#contact"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            if (onSelectProject) {
+                              onSelectProject(project.id)
+                            } else {
+                              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+                            }
+                          }}
+                          className="inline-flex items-center gap-2 font-body text-xs tracking-[0.16em] uppercase text-accent hover:text-black transition-colors group"
+                        >
+                          <span>{t('projects.enquireCta')}</span>
+                          <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">→</span>
+                        </a>
+                      </div>
+
+                      {/* Features Block */}
+                      {hasFeatures && (
+                        <div className="project-features-block mt-8 md:mt-10 pt-6 border-t border-neutral/20">
+                          <p className="eyebrow text-neutral/60 mb-4">{t('projects.featuresLabel')}</p>
+                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-3">
+                            {features.map((feature, fIdx) => (
+                              <div key={fIdx} className="flex items-baseline gap-2">
+                                <span className="text-accent text-xs select-none" aria-hidden="true">—</span>
+                                <span className="font-body text-xs sm:text-[13px] text-neutral/80 leading-snug">
+                                  {feature}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                   </div>

@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { projects } from './data/siteData'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navigation from './components/layout/Navigation'
@@ -43,6 +44,15 @@ function App() {
     projectsRef,
   )
 
+  const [selectedProjectId, setSelectedProjectId] = useState('01')
+
+  const handleSelectProject = (projectId) => {
+    setSelectedProjectId(projectId)
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const selectedProject = projects.find((p) => p.id === selectedProjectId) || projects[0]
+
   useSectionFocus()
 
   useEffect(() => {
@@ -82,13 +92,14 @@ function App() {
           <Projects
             isActive={activeSection === 'projects'}
             activeIndex={activeProjectIndex}
+            onSelectProject={handleSelectProject}
           />
         </div>
         <Partners />
         <PortfolioImpact />
         <Vision />
         <ClosingCTA />
-        <Enquiry />
+        <Enquiry project={selectedProject} />
       </main>
       <Footer />
     </>

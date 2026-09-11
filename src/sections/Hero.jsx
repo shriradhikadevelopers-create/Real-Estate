@@ -25,7 +25,6 @@ function Hero() {
     // DESKTOP — Cinematic Entrance + Pointer Depth + Scroll Separation
     // ══════════════════════════════════════════════════════════════
     mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
-      const isScrolled = window.scrollY > 0
       const entranceTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
       entranceTl.from('.reveal-nav', {
@@ -63,9 +62,18 @@ function Hero() {
         duration: 1,
       }, "-=0.3")
 
-      if (isScrolled) {
-        entranceTl.progress(1)
+      // Guarded entrance termination: only neutralize if entranceTl is actively running and uncompleted
+      const finishEntrance = () => {
+        if (entranceTl && !entranceTl.paused() && entranceTl.progress() < 1) {
+          entranceTl.progress(1).pause()
+        }
       }
+
+      entranceTl.eventCallback('onComplete', () => {
+        if (entranceTl.progress() >= 1) {
+          entranceTl.pause()
+        }
+      })
 
       // ── Pointer Depth (unchanged) ──
       // Image: stronger response — quickTo owns x and y on .hero-image-wrapper
@@ -95,15 +103,9 @@ const imgYTo = gsap.quickTo('.hero-image-inner', 'y', {
       container?.addEventListener('mousemove', handleMouseMove)
 
       // ── Scroll Transformation ──
-      // Lines queried individually — each line gets a different movement vector.
-      // .hero-image-wrapper: only scale is animated here.
-      // x and y on .hero-image-wrapper are owned exclusively by the quickTo handlers above.
-      //
-      // 3-phase opacity structure (10-unit internal duration):
-      //   Phase 1 (0–20%):  movement begins subtly, opacity = 1
-      //   Phase 2 (20–65%): clear separation, still fully visible
-      //   Phase 3 (65–100%): movement continues, opacity fades to 0
       const lines = container.querySelectorAll('.hero-headline-line')
+
+      let initialRestorationDone = false
 
       const scrollTl = gsap.timeline({
   scrollTrigger: {
@@ -115,8 +117,56 @@ const imgYTo = gsap.quickTo('.hero-image-inner', 'y', {
     pinSpacing: true,
     anticipatePin: 1,
     invalidateOnRefresh: true,
+    onUpdate: (self) => {
+      if (!initialRestorationDone && self.progress > 0) {
+        initialRestorationDone = true
+        finishEntrance()
+        self.animation.progress(self.progress)
+      }
+    },
+    onRefresh: (self) => {
+      if (!initialRestorationDone && self.progress > 0) {
+        initialRestorationDone = true
+        finishEntrance()
+        self.animation.progress(self.progress)
+      }
+    },
   }
 })
+
+      const syncInitialScrollState = () => {
+        if (initialRestorationDone) return
+        const currentScroll = window.scrollY || document.documentElement.scrollTop || 0
+        if (currentScroll > 0) {
+          const st = scrollTl.scrollTrigger
+          if (st && st.end > st.start) {
+            initialRestorationDone = true
+            finishEntrance()
+            const targetProgress = Math.max(0, Math.min(1, (currentScroll - st.start) / (st.end - st.start)))
+            scrollTl.progress(targetProgress)
+          }
+        }
+      }
+
+      syncInitialScrollState()
+
+      const onEarlyScroll = () => {
+        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 0) {
+          syncInitialScrollState()
+        }
+        if (initialRestorationDone) {
+          window.removeEventListener('scroll', onEarlyScroll)
+        }
+      }
+      window.addEventListener('scroll', onEarlyScroll, { passive: true })
+
+      const rafId = requestAnimationFrame(() => {
+        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 0) {
+          syncInitialScrollState()
+        }
+      })
+
+      ScrollTrigger.addEventListener('refresh', syncInitialScrollState)
 
 gsap.set('.hero-image-wrapper', {
   transformOrigin: '50% 55%',
@@ -288,6 +338,9 @@ scrollTl
 // The image is centered and settled before the next section begins.
 .to({}, { duration: 1.5 })
       return () => {
+        window.removeEventListener('scroll', onEarlyScroll)
+        ScrollTrigger.removeEventListener('refresh', syncInitialScrollState)
+        cancelAnimationFrame(rafId)
         container?.removeEventListener('mousemove', handleMouseMove)
       }
     })
@@ -296,7 +349,6 @@ scrollTl
     // MOBILE — Entrance + One Coordinated Scroll Timeline
     // ══════════════════════════════════════════════════════════════
     mm.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
-      const isScrolled = window.scrollY > 0
       const entranceTl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
       entranceTl.from('.reveal-nav', {
@@ -338,9 +390,18 @@ scrollTl
         ease: 'power2.inOut',
       }, "-=0.3")
 
-      if (isScrolled) {
-        entranceTl.progress(1)
+      // Guarded entrance termination: only neutralize if entranceTl is actively running and uncompleted
+      const finishEntrance = () => {
+        if (entranceTl && !entranceTl.paused() && entranceTl.progress() < 1) {
+          entranceTl.progress(1).pause()
+        }
       }
+
+      entranceTl.eventCallback('onComplete', () => {
+        if (entranceTl.progress() >= 1) {
+          entranceTl.pause()
+        }
+      })
 
       const container = containerRef.current
       const lines = container.querySelectorAll('.hero-headline-line')
@@ -358,21 +419,8 @@ scrollTl
         }
       })
 
-      // ── One coordinated timeline ──
-      // Headline lines + labels + image all share a single ScrollTrigger.
-      // This replaces the old block-level .hero-text-content fade and the
-      // expandTl edge-to-edge technique. The expandTl trigger ('top 78%' on
-      // imageWrapper) never fired during Hero scroll — the image loads at ~35%
-      // viewport height and moves upward on scroll, away from the 78% mark.
-      //
-      // 4-phase visual choreography (10-unit internal duration):
-      //   Phase 1 (0–35%):   headline leads — image stays near scale 1.0
-      //   Phase 2 (35–65%):  headline clearly separated — image growth begins
-      //   Phase 3 (65–85%):  text fading — image nearing dominant final state
-      //   Phase 4 (85–100%): image settled at max — headline gone — next section begins
-      //
-      // If pacing feels too fast: widen 'end' only (e.g. '90% top').
-      // Do not adjust scale, movement distances, or scrub value.
+      let initialRestorationDone = false
+
       const mobileTl = gsap.timeline({
         scrollTrigger: {
           trigger: container,
@@ -383,8 +431,56 @@ scrollTl
           pinSpacing: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            if (!initialRestorationDone && self.progress > 0) {
+              initialRestorationDone = true
+              finishEntrance()
+              self.animation.progress(self.progress)
+            }
+          },
+          onRefresh: (self) => {
+            if (!initialRestorationDone && self.progress > 0) {
+              initialRestorationDone = true
+              finishEntrance()
+              self.animation.progress(self.progress)
+            }
+          },
         }
       })
+
+      const syncInitialScrollState = () => {
+        if (initialRestorationDone) return
+        const currentScroll = window.scrollY || document.documentElement.scrollTop || 0
+        if (currentScroll > 0) {
+          const st = mobileTl.scrollTrigger
+          if (st && st.end > st.start) {
+            initialRestorationDone = true
+            finishEntrance()
+            const targetProgress = Math.max(0, Math.min(1, (currentScroll - st.start) / (st.end - st.start)))
+            mobileTl.progress(targetProgress)
+          }
+        }
+      }
+
+      syncInitialScrollState()
+
+      const onEarlyScroll = () => {
+        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 0) {
+          syncInitialScrollState()
+        }
+        if (initialRestorationDone) {
+          window.removeEventListener('scroll', onEarlyScroll)
+        }
+      }
+      window.addEventListener('scroll', onEarlyScroll, { passive: true })
+
+      const rafId = requestAnimationFrame(() => {
+        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 0) {
+          syncInitialScrollState()
+        }
+      })
+
+      ScrollTrigger.addEventListener('refresh', syncInitialScrollState)
 
       mobileTl
         // ═══════════════════════════════════════
@@ -475,6 +571,11 @@ scrollTl
         // FINAL HOLD
         .to({}, { duration: 3.2 })
 
+      return () => {
+        window.removeEventListener('scroll', onEarlyScroll)
+        ScrollTrigger.removeEventListener('refresh', syncInitialScrollState)
+        cancelAnimationFrame(rafId)
+      }
     })
   }, { scope: containerRef })
 

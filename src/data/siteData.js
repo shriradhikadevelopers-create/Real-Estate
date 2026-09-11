@@ -8,6 +8,14 @@
  * company achievements, statistics, or claims.
  */
 
+import raghavpuramOverview from '../assets/project1/overview.jpg'
+import raghavpuramVid1 from '../assets/project1/Video/vid1.mp4'
+import raghavpuramImg1 from '../assets/project1/Gallery/Screenshot 2026-09-10 224349.png'
+import raghavpuramImg2 from '../assets/project1/Gallery/Screenshot 2026-09-10 224545.png'
+import raghavpuramImg3 from '../assets/project1/Gallery/Screenshot 2026-09-10 224703.png'
+import raghavpuramImg4 from '../assets/project1/Gallery/Screenshot 2026-09-10 225028.png'
+import raghavpuramImg5 from '../assets/project1/Gallery/Screenshot 2026-09-10 225127.png'
+
 // ── Company Information ──
 export const company = {
   name: "Shri Radhika Developers",
@@ -74,406 +82,326 @@ export const projects = [
   {
     id: "01",
     number: "01",
-    name: "Project Name",
-    category: "Residential Development",
-    location: "Location",
-    status: "Completed",
+
+    developer: null,
+    brand: null,
+
+    name: "Raghavpuram",
+    category: "Residential Colony",
+    location: "Sugar Mill Bypass, Rankhandi Chowki, Deoband",
+    status: "Booking Open",
     description:
-      "A selected residential development designed with a focus on quality living and long-term value creation.",
-    coverImage: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&q=80&w=1200",
-    ],
-    videos: [
-      {
-        label: "Project Film",
-        src: null,
-        poster: null,
-      },
-    ],
-    locationMedia: {
-      enabled: false,
-      coordinates: null,
-      label: "Project Location",
-      description: "Location media will be added when project coordinates are finalized.",
+      "Layout-approved residential colony by the Deoband regulated area.",
+
+    overview: {
+      tagline: "Layout-approved residential colony by the Deoband regulated area.",
+      promotionalLine: null,
     },
-    mediaViews: {
+
+    facts: {
+      totalPlots: "67",
+      plotType: "Residential Plots",
+      roadWidth: "30 ft",
+    },
+
+    features: [
+      "Covered gated colony with boundary wall",
+      "Wide roads with proper drainage system",
+      "Lush green, beautiful surroundings",
+      "Just 5 minutes from the railway station",
+      "Streetlight poles available",
+    ],
+
+    media: {
       overview: {
         type: "image",
-        label: "Overview",
-        src: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project exterior view",
+        src: raghavpuramOverview,
+        alt: "Raghavpuram residential colony overview",
       },
+
       gallery: [
         {
           type: "image",
-          label: "Exterior",
-          src: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200",
-          alt: "Project exterior view",
+          src: raghavpuramImg1,
+          alt: "Raghavpuram main entrance and arrival avenue",
         },
         {
           type: "image",
-          label: "Interior",
-          src: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1200",
-          alt: "Project interior view",
+          src: raghavpuramImg2,
+          alt: "Raghavpuram residential plots and wide paved road",
         },
         {
           type: "image",
-          label: "Detail",
-          src: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&q=80&w=1200",
-          alt: "Architectural detail",
+          src: raghavpuramImg3,
+          alt: "Raghavpuram internal road and landscaped surroundings",
+        },
+        {
+          type: "image",
+          src: raghavpuramImg4,
+          alt: "Raghavpuram plotted sectors and colony development",
+        },
+        {
+          type: "image",
+          src: raghavpuramImg5,
+          alt: "Raghavpuram layout overview and infrastructure",
         },
       ],
-      film: {
-        type: "video",
-        label: "Project Film",
-        src: null,
-        poster: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200",
-      },
+
+      videos: [
+        {
+          id: "01",
+          label: "Project Film",
+          src: raghavpuramVid1,
+          poster: null,
+        },
+      ],
+
       location: {
-        type: "map",
-        label: "Project Location",
-        coordinates: null,
-        placeholderImage: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200",
-        description: "Location media will be added when project coordinates are finalized.",
+        address: "शुगर मिल बाईपास, रणखण्डी पुलिस चौकी के सामने, निकट रूप गार्डन, देवबन्द",
+        description: null,
+        coordinates: {
+          lat: null,
+          lng: null,
+        },
+        mapsUrl: null,
       },
     },
-    media: [
-      {
-        type: "image",
-        label: "Exterior",
-        src: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project exterior view",
-      },
-      {
-        type: "image",
-        label: "Interior",
-        src: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project interior view",
-      },
-      {
-        type: "image",
-        label: "Architecture",
-        src: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&q=80&w=1200",
-        alt: "Architectural detail",
-      },
-      {
-        type: "video",
-        label: "Film",
-        src: null,
-        poster: null,
-      },
-      {
-        type: "location",
-        label: "Location",
-        src: null,
-      },
-    ],
+
+    contact: {
+      phones: [
+        "7983948531",
+        "9259562820",
+        "9997065799",
+      ],
+    },
   },
   {
     id: "02",
     number: "02",
+
+    developer: "Shree Radhika Developers",
+    brand: "SRD — Since 2005",
+
     name: "Project Name",
     category: "Commercial Development",
     location: "Location",
     status: "Ongoing",
     description:
       "A commercial development positioned to serve growing demand in an emerging location.",
-    coverImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&q=80&w=1200",
-    ],
-    videos: [
-      {
-        label: "Project Film",
-        src: null,
-        poster: null,
-      },
-    ],
-    locationMedia: {
-      enabled: false,
-      coordinates: null,
-      label: "Project Location",
-      description: "Location media will be added when project coordinates are finalized.",
+
+    overview: {
+      tagline: null,
+      promotionalLine: null,
     },
-    mediaViews: {
+
+    facts: {
+      totalPlots: null,
+      plotType: null,
+      roadWidth: null,
+    },
+
+    features: [],
+
+    media: {
       overview: {
         type: "image",
-        label: "Overview",
         src: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
         alt: "Project exterior view",
       },
+
       gallery: [
         {
           type: "image",
-          label: "Exterior",
           src: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
           alt: "Project exterior view",
         },
         {
           type: "image",
-          label: "Interior",
           src: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=1200",
           alt: "Project interior view",
         },
         {
           type: "image",
-          label: "Detail",
           src: "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&q=80&w=1200",
           alt: "Architectural detail",
         },
       ],
-      film: {
-        type: "video",
-        label: "Project Film",
-        src: null,
-        poster: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
-      },
+
+      videos: [
+        {
+          id: "01",
+          label: "Project Film",
+          src: null,
+          poster: null,
+        },
+      ],
+
       location: {
-        type: "map",
-        label: "Project Location",
-        coordinates: null,
-        placeholderImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
-        description: "Location media will be added when project coordinates are finalized.",
+        address: "Location",
+        description: null,
+        coordinates: {
+          lat: null,
+          lng: null,
+        },
+        mapsUrl: null,
       },
     },
-    media: [
-      {
-        type: "image",
-        label: "Exterior",
-        src: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project exterior view",
-      },
-      {
-        type: "image",
-        label: "Interior",
-        src: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project interior view",
-      },
-      {
-        type: "image",
-        label: "Architecture",
-        src: "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&q=80&w=1200",
-        alt: "Architectural detail",
-      },
-      {
-        type: "video",
-        label: "Film",
-        src: null,
-        poster: null,
-      },
-      {
-        type: "location",
-        label: "Location",
-        src: null,
-      },
-    ],
+
+    contact: {
+      phones: [],
+    },
   },
   {
     id: "03",
     number: "03",
+
+    developer: "Shree Radhika Developers",
+    brand: "SRD — Since 2005",
+
     name: "Project Name",
     category: "Mixed-Use Development",
     location: "Location",
     status: "Completed",
     description:
       "An integrated development combining residential and commercial spaces within a thoughtfully planned environment.",
-    coverImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=1200",
-    ],
-    videos: [
-      {
-        label: "Project Film",
-        src: null,
-        poster: null,
-      },
-    ],
-    locationMedia: {
-      enabled: false,
-      coordinates: null,
-      label: "Project Location",
-      description: "Location media will be added when project coordinates are finalized.",
+
+    overview: {
+      tagline: null,
+      promotionalLine: null,
     },
-    mediaViews: {
+
+    facts: {
+      totalPlots: null,
+      plotType: null,
+      roadWidth: null,
+    },
+
+    features: [],
+
+    media: {
       overview: {
         type: "image",
-        label: "Overview",
         src: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200",
         alt: "Project exterior view",
       },
+
       gallery: [
         {
           type: "image",
-          label: "Exterior",
           src: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200",
           alt: "Project exterior view",
         },
         {
           type: "image",
-          label: "Interior",
           src: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200",
           alt: "Project interior view",
         },
         {
           type: "image",
-          label: "Detail",
           src: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=1200",
           alt: "Architectural detail",
         },
       ],
-      film: {
-        type: "video",
-        label: "Project Film",
-        src: null,
-        poster: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200",
-      },
+
+      videos: [
+        {
+          id: "01",
+          label: "Project Film",
+          src: null,
+          poster: null,
+        },
+      ],
+
       location: {
-        type: "map",
-        label: "Project Location",
-        coordinates: null,
-        placeholderImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200",
-        description: "Location media will be added when project coordinates are finalized.",
+        address: "Location",
+        description: null,
+        coordinates: {
+          lat: null,
+          lng: null,
+        },
+        mapsUrl: null,
       },
     },
-    media: [
-      {
-        type: "image",
-        label: "Exterior",
-        src: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project exterior view",
-      },
-      {
-        type: "image",
-        label: "Interior",
-        src: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project interior view",
-      },
-      {
-        type: "image",
-        label: "Architecture",
-        src: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=1200",
-        alt: "Architectural detail",
-      },
-      {
-        type: "video",
-        label: "Film",
-        src: null,
-        poster: null,
-      },
-      {
-        type: "location",
-        label: "Location",
-        src: null,
-      },
-    ],
+
+    contact: {
+      phones: [],
+    },
   },
   {
     id: "04",
     number: "04",
+
+    developer: "Shree Radhika Developers",
+    brand: "SRD — Since 2005",
+
     name: "Project Name",
     category: "Residential Development",
     location: "Location",
     status: "Upcoming",
     description:
       "An upcoming residential project focused on modern living and sustainable community design.",
-    coverImage: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200",
-    galleryImages: [
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&q=80&w=1200",
-      "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?auto=format&fit=crop&q=80&w=1200",
-    ],
-    videos: [
-      {
-        label: "Project Film",
-        src: null,
-        poster: null,
-      },
-    ],
-    locationMedia: {
-      enabled: false,
-      coordinates: null,
-      label: "Project Location",
-      description: "Location media will be added when project coordinates are finalized.",
+
+    overview: {
+      tagline: null,
+      promotionalLine: null,
     },
-    mediaViews: {
+
+    facts: {
+      totalPlots: null,
+      plotType: null,
+      roadWidth: null,
+    },
+
+    features: [],
+
+    media: {
       overview: {
         type: "image",
-        label: "Overview",
         src: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200",
         alt: "Project exterior view",
       },
+
       gallery: [
         {
           type: "image",
-          label: "Exterior",
           src: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200",
           alt: "Project exterior view",
         },
         {
           type: "image",
-          label: "Interior",
           src: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&q=80&w=1200",
           alt: "Project interior view",
         },
         {
           type: "image",
-          label: "Detail",
           src: "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?auto=format&fit=crop&q=80&w=1200",
           alt: "Architectural detail",
         },
       ],
-      film: {
-        type: "video",
-        label: "Project Film",
-        src: null,
-        poster: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200",
-      },
+
+      videos: [
+        {
+          id: "01",
+          label: "Project Film",
+          src: null,
+          poster: null,
+        },
+      ],
+
       location: {
-        type: "map",
-        label: "Project Location",
-        coordinates: null,
-        placeholderImage: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200",
-        description: "Location media will be added when project coordinates are finalized.",
+        address: "Location",
+        description: null,
+        coordinates: {
+          lat: null,
+          lng: null,
+        },
+        mapsUrl: null,
       },
     },
-    media: [
-      {
-        type: "image",
-        label: "Exterior",
-        src: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project exterior view",
-      },
-      {
-        type: "image",
-        label: "Interior",
-        src: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project interior view",
-      },
-      {
-        type: "image",
-        label: "Architecture",
-        src: "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?auto=format&fit=crop&q=80&w=1200",
-        alt: "Architectural detail",
-      },
-      {
-        type: "video",
-        label: "Film",
-        src: null,
-        poster: null,
-      },
-      {
-        type: "location",
-        label: "Location",
-        src: null,
-      },
-    ],
+
+    contact: {
+      phones: [],
+    },
   },
 ];
 
