@@ -9,7 +9,6 @@
  */
 
 import raghavpuramOverview from '../assets/project1/overview.jpg'
-import raghavpuramVid1 from '../assets/project1/Video/vid1.mp4'
 import raghavpuramImg1 from '../assets/project1/Gallery/Screenshot 2026-09-10 224349.png'
 import raghavpuramImg2 from '../assets/project1/Gallery/Screenshot 2026-09-10 224545.png'
 import raghavpuramImg3 from '../assets/project1/Gallery/Screenshot 2026-09-10 224703.png'
@@ -151,7 +150,7 @@ export const projects = [
         {
           id: "01",
           label: "Project Film",
-          src: raghavpuramVid1,
+          src: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/vid1.mp4",
           poster: null,
         },
       ],
