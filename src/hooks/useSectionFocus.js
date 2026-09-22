@@ -31,6 +31,11 @@ const SECTION_BG_COLORS = {
   footer: '#171716',
 }
 
+// Refined section focus tuning: outgoing/receding sections stay visibly present
+const RECEDING_OPACITY = 0.94 // Target within client-requested 0.92–0.95 range
+const RECEDING_SCALE = 0.985  // Subtle depth scale
+const RECEDING_Y = -15        // Subtle upward depth offset
+
 /**
  * useSectionFocus - Coordinates cinematic section-level visual focus handoffs across the entire website.
  * 
@@ -38,10 +43,10 @@ const SECTION_BG_COLORS = {
  * - Controls ONLY the section-level wrapper (.section-focus-wrapper) opacity, scale, and y.
  * - Does NOT touch or animate child elements (owned by section-internal timelines).
  * - Focused: opacity = 1.0, scale = 1.0, y = 0px, pointerEvents = 'auto'
- * - Dormant / Suppressed: opacity = 0, scale = 0.96, y = 35px, pointerEvents = 'none' (NO early peeking!)
- * - Receded / Departing: opacity = 0.05, scale = 0.95, y = -35px, pointerEvents = 'none' (genuine depth departure!)
+ * - Receded / Unfocused: opacity = 0.94 (range 0.92–0.95), scale = 0.985, y = -15px, pointerEvents = 'none' (never fades to 0)
+ * - Dormant / Suppressed (downstream only): opacity = 0, scale = 0.96, y = 35px, pointerEvents = 'none' (prevents early peeking from below)
  * - Driven purely by ScrollTrigger scrub (100% interruptible, responsive to scroll speed, reversible).
- * - Golden Invariant: Section A Focused -> A recedes & B emerges -> B becomes 100% focused at top 22% (desktop) / 25% (mobile) -> ONLY NOW B's opening plays.
+ * - Golden Invariant: Section A Focused -> A recedes (to 0.94) & B emerges -> B becomes 100% focused at top 22% (desktop) / 25% (mobile) -> ONLY NOW B's opening plays.
  * - Atmospheric transitions: Boundary pairs smoothly cross-dissolve background colors between #F4F1EB and #171716, eliminating hard edges.
  */
 export function useSectionFocus() {
@@ -115,7 +120,7 @@ export function useSectionFocus() {
               onUpdate: (self) => {
                 const p = self.progress
 
-                // Phase 1: Departing Section A recedes into depth and completely disappears (0.0 -> 0.55)
+                // Phase 1: Departing Section A recedes into depth without disappearing (0.0 -> 0.55)
                 if (currentSection.wrapper && self.isActive) {
                   if (i > 0 && window.scrollY <= 100) {
                     gsap.set(currentSection.wrapper, { opacity: 0, scale: 0.95, y: 50, pointerEvents: 'none' })
@@ -125,12 +130,12 @@ export function useSectionFocus() {
                     const t = p / 0.55
                     // smooth power1.inOut curve
                     const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
-                    const op = Math.max(0, 1 - eased)
-                    const sc = 1 - 0.06 * eased
-                    const yVal = -50 * eased
+                    const op = 1 - (1 - RECEDING_OPACITY) * eased
+                    const sc = 1 - (1 - RECEDING_SCALE) * eased
+                    const yVal = RECEDING_Y * eased
                     gsap.set(currentSection.wrapper, { opacity: op, scale: sc, y: yVal })
                   } else {
-                    gsap.set(currentSection.wrapper, { opacity: 0, scale: 0.94, y: -50 })
+                    gsap.set(currentSection.wrapper, { opacity: RECEDING_OPACITY, scale: RECEDING_SCALE, y: RECEDING_Y })
                   }
                 }
 
@@ -149,7 +154,7 @@ export function useSectionFocus() {
               },
               onLeave: () => {
                 if (currentSection.wrapper) {
-                  gsap.set(currentSection.wrapper, { opacity: 0, scale: 0.94, y: -50, pointerEvents: 'none' })
+                  gsap.set(currentSection.wrapper, { opacity: RECEDING_OPACITY, scale: RECEDING_SCALE, y: RECEDING_Y, pointerEvents: 'none' })
                 }
                 if (nextSection.wrapper) {
                   gsap.set(nextSection.wrapper, { opacity: 1, scale: 1, y: 0, pointerEvents: 'auto' })
