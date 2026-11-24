@@ -3,6 +3,7 @@
 @theme {
   --color-ivory: #F4F1EB;
   --color-black: #171716;
+  --color-charcoal: #171716;
   --color-neutral: #A8A39A;
   --color-accent: #5C493B;
 
@@ -477,25 +478,6 @@ html[lang="hi"] .enquiry-headline {
   background: rgba(23, 23, 22, 0.12);
 }
 
-/* ── Explore Cursor ── */
-.explore-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  pointer-events: none;
-  font-family: var(--font-body);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--color-ivory);
-  background: var(--color-black);
-  padding: 8px 16px;
-  border-radius: 999px;
-  opacity: 0;
-  transform: scale(0.8);
-  will-change: transform;
-}
 
 /* ── Dark Section Wipe Transition ── */
 .section-wipe-dark {
@@ -1894,7 +1876,7 @@ html[lang="hi"] .cta-headline {
 
 /* ── Custom Project Video Player ── */
 .project-video-container {
-  background-color: var(--color-black);
+  background-color: transparent;
 }
 
 .project-video-container:fullscreen {

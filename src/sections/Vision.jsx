@@ -29,7 +29,7 @@ function Vision() {
         scrollTrigger: {
           id: 'vision-desktop-eyebrow',
           trigger: containerRef.current,
-          start: 'top 22%',
+          start: 'top 90%',
           toggleActions: 'play none none none',
           invalidateOnRefresh: true,
         }
@@ -45,7 +45,7 @@ function Vision() {
           scrollTrigger: {
             id: `vision-desktop-headline-${i}`,
             trigger: line.parentElement || line,
-            start: 'top 20%',
+            start: 'top 86%',
             toggleActions: 'play none none none',
             invalidateOnRefresh: true,
           }
@@ -135,7 +135,7 @@ function Vision() {
         scrollTrigger: {
           id: 'vision-mobile-eyebrow',
           trigger: containerRef.current,
-          start: 'top 25%',
+          start: 'top 92%',
           toggleActions: 'play none none none',
           invalidateOnRefresh: true,
         }
@@ -151,7 +151,7 @@ function Vision() {
           scrollTrigger: {
             id: `vision-mobile-headline-${i}`,
             trigger: line.parentElement || line,
-            start: 'top 22%',
+            start: 'top 88%',
             toggleActions: 'play none none none',
             invalidateOnRefresh: true,
           }

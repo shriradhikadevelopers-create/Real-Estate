@@ -47,3 +47,11 @@ Thumbs.db
 .vite/
 .cache/
 .eslintcache
+
+# Large Media Files (hosted on Vercel Blob / CDN)
+*.mp4
+*.MP4
+
+
+.vercel
+.env*

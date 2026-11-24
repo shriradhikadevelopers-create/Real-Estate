@@ -43,7 +43,7 @@ function PortfolioImpact() {
           scrollTrigger: {
             id: 'impact-eyebrow',
             trigger: containerRef.current,
-            start: isDesktop ? 'top 22%' : 'top 25%',
+            start: isDesktop ? 'top 90%' : 'top 92%',
             toggleActions: 'play none none none',
             invalidateOnRefresh: true,
           }
@@ -58,7 +58,7 @@ function PortfolioImpact() {
           scrollTrigger: {
             id: 'impact-top-divider',
             trigger: containerRef.current,
-            start: isDesktop ? 'top 18%' : 'top 20%',
+            start: isDesktop ? 'top 86%' : 'top 88%',
             toggleActions: 'play none none none',
             invalidateOnRefresh: true,
           }

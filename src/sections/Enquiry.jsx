@@ -54,19 +54,9 @@ function Enquiry({ project }) {
         }
         const { isDesktop } = context.conditions
 
-        // Dynamic start point: strictly gates opening until focus handoff completes
-        const getHandoffEnd = () => {
-          const t = ScrollTrigger.getById('focus-handoff-cta-contact')
-          if (t && typeof t.end === 'number') {
-            return t.end
-          }
-          if (containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect()
-            const scrollTop = window.scrollY || document.documentElement.scrollTop
-            const triggerOffset = isDesktop ? window.innerHeight * 0.22 : window.innerHeight * 0.25
-            return scrollTop + rect.top - triggerOffset
-          }
-          return isDesktop ? 'top 22%' : 'top 25%'
+        // Section opening begins with sensible lead-in as Contact approaches view
+        const getOpeningStart = () => {
+          return isDesktop ? 'top 78%' : 'top 80%'
         }
 
         // Set initial pre-opening dormant states
@@ -80,8 +70,8 @@ function Enquiry({ project }) {
           scrollTrigger: {
             id: 'enquiry-opening',
             trigger: containerRef.current,
-            start: getHandoffEnd,
-            end: () => `+=${window.innerHeight * (isDesktop ? 0.35 : 0.30)}`,
+            start: getOpeningStart,
+            end: () => `+=${window.innerHeight * (isDesktop ? 0.45 : 0.40)}`,
             scrub: 0.8,
             invalidateOnRefresh: true,
           }

@@ -102,8 +102,8 @@ export function useSectionFocus() {
           }
 
           const isLastPair = i === sections.length - 2 // contact -> footer
-          // Slow, cinematic handoff travel starts as nextSection enters the bottom of the viewport
-          const startPos = isDesktop ? 'top 92%' : 'top 95%'
+          // Focus handoff travel begins as nextSection arrives at the viewport threshold
+          const startPos = isDesktop ? 'top 100%' : 'top 100%'
           // Handoff completes when nextSection reaches its prime visual focus position
           const endPos = isLastPair
             ? 'bottom bottom'
@@ -120,14 +120,14 @@ export function useSectionFocus() {
               onUpdate: (self) => {
                 const p = self.progress
 
-                // Phase 1: Departing Section A recedes into depth without disappearing (0.0 -> 0.55)
+                // Phase 1: Departing Section A recedes into depth without disappearing (0.0 -> 0.50)
                 if (currentSection.wrapper && self.isActive) {
                   if (i > 0 && window.scrollY <= 100) {
                     gsap.set(currentSection.wrapper, { opacity: 0, scale: 0.95, y: 50, pointerEvents: 'none' })
                     return
                   }
-                  if (p <= 0.55) {
-                    const t = p / 0.55
+                  if (p <= 0.50) {
+                    const t = p / 0.50
                     // smooth power1.inOut curve
                     const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
                     const op = 1 - (1 - RECEDING_OPACITY) * eased
@@ -139,7 +139,7 @@ export function useSectionFocus() {
                   }
                 }
 
-                if (p >= 0.75) {
+                if (p >= 0.70) {
                   document.documentElement.dataset.focusedSection = nextSection.id
                   if (nextSection.wrapper) nextSection.wrapper.style.pointerEvents = 'auto'
                   if (currentSection.wrapper) currentSection.wrapper.style.pointerEvents = 'none'
@@ -182,29 +182,44 @@ export function useSectionFocus() {
             },
           })
 
-          // Phase 2: Entering Section B emerges and takes over visual dominance (0.35 -> 0.85)
+          // Phase 2: Entering Section B emerges and takes over visual dominance (0.10 -> 0.70)
           // Explicitly set 0 at time 0 so rewind guarantees dormancy even before tween start
-          tl.set(nextSection.wrapper, { opacity: 0, scale: 0.95, y: 50 }, 0)
+          tl.set(nextSection.wrapper, { opacity: 0, scale: 0.95, y: 35 }, 0)
           tl.to(
             nextSection.wrapper,
-            { opacity: 1, scale: 1, y: 0, duration: 0.50, ease: 'power1.inOut' },
-            0.35
+            { opacity: 1, scale: 1, y: 0, duration: 0.60, ease: 'power1.inOut' },
+            0.10
           )
 
-          // Phase 3: Hold Section B as the ONLY dominant visual composition before opening begins (0.85 -> 1.0)
+          // Phase 3: Hold Section B as the ONLY dominant visual composition before opening begins (0.70 -> 1.0)
           tl.set({}, {}, 1.0)
 
           // Atmospheric background cross-dissolve across light/dark boundaries
+          // Dedicated trigger begins slightly BEFORE the section enters view (top 115% / 118%)
+          // and completes by the time it reaches the viewport boundary (top 100%), ensuring
+          // the background is already at its intended color before the section is visible.
           const currentBg = SECTION_BG_COLORS[currentSection.id]
           const nextBg = SECTION_BG_COLORS[nextSection.id]
 
           if (currentBg && nextBg && currentBg !== nextBg) {
-            // Smoothly interpolate next section's background from currentBg to nextBg
-            tl.fromTo(
+            const bgStart = isDesktop ? 'top 115%' : 'top 118%'
+            const bgEnd = 'top 100%'
+
+            const bgTl = gsap.timeline({
+              scrollTrigger: {
+                id: `focus-bg-${currentSection.id}-${nextSection.id}`,
+                trigger: nextSection.el,
+                start: bgStart,
+                end: bgEnd,
+                scrub: 0.5,
+                invalidateOnRefresh: true,
+              },
+            })
+
+            bgTl.fromTo(
               nextSection.el,
               { backgroundColor: currentBg },
-              { backgroundColor: nextBg, duration: 0.70, ease: 'power1.inOut', immediateRender: false },
-              0.10
+              { backgroundColor: nextBg, ease: 'power1.inOut', immediateRender: false }
             )
           }
         }

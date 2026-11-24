@@ -401,13 +401,14 @@ export function useEditorialScroll(philosophyRef, projectsRef) {
         }
 
         /*
-         * Enter Projects ONLY after the Philosophy master pin has genuinely completed
-         * (reached its resolved end) and Projects is reaching the focus line.
+         * Enter Projects after Philosophy has finished and either:
+         * - Projects is reaching the focus line, or
+         * - The first project is visibly dominant in the viewport.
          */
         if (
           sectionGateOpen &&
           philFinished &&
-          firstProjY <= focusY + sectionHyst
+          (firstProjY <= focusY + sectionHyst || dominantProjectValue >= PROJECT_VISIBLE)
         ) {
           section = 'projects'
           projectIndex = 0
@@ -492,7 +493,8 @@ export function useEditorialScroll(philosophyRef, projectsRef) {
         if (
           sectionGateOpen &&
           projectIndex === 0 &&
-          (firstProjY > focusY + sectionHyst || (philEnd !== null && currentScrollY < philEnd - 2))
+          ((philosophyRect.bottom > vh * 0.1 && dominantProjectValue < PROJECT_VISIBLE && firstProjY > focusY + sectionHyst + indexHyst) ||
+            (philEnd !== null && currentScrollY < philEnd - 2))
         ) {
           section = 'philosophy'
           philosophyIndex = calculatedPhilIndex

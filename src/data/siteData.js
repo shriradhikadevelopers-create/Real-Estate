@@ -15,6 +15,42 @@ import raghavpuramImg3 from '../assets/project1/Gallery/Screenshot 2026-09-10 22
 import raghavpuramImg4 from '../assets/project1/Gallery/Screenshot 2026-09-10 225028.png'
 import raghavpuramImg5 from '../assets/project1/Gallery/Screenshot 2026-09-10 225127.png'
 
+// City Complex
+import cityComplexOverview from '../assets/City Complex/Gallery/CITY_COMPLEX_IMG3.webp'
+import cityComplexImg1 from '../assets/City Complex/Gallery/CITY_COMPLEX_IMG1.webp'
+import cityComplexImg2 from '../assets/City Complex/Gallery/CITY_COMPLEX_IMG2.webp'
+import cityComplexImg3 from '../assets/City Complex/Gallery/CITY_COMPLEX_IMG3.webp'
+
+// Vrindavan Vihar
+import vrindavanOverview from '../assets/Vrindavan Vihar/Gallery/VRINDA_IMG1.webp'
+import vrindavanImg1 from '../assets/Vrindavan Vihar/Gallery/VRINDA_IMG1.webp'
+import vrindavanImg2 from '../assets/Vrindavan Vihar/Gallery/VRINDA_IMG2.webp'
+import vrindavanImg3 from '../assets/Vrindavan Vihar/Gallery/VRINDA_IMG3.webp'
+import vrindavanImg4 from '../assets/Vrindavan Vihar/Gallery/VRINDA_IMG4.webp'
+import vrindavanImg5 from '../assets/Vrindavan Vihar/Gallery/VRINDA_IMG5.webp'
+import vrindavanImg6 from '../assets/Vrindavan Vihar/Gallery/VRINDA_IMG6.webp'
+
+// Suvidha Plaza
+import suvidhaOverview from '../assets/Suvidha Plaza/Gallery/SUVIDHA_IMG1.webp'
+import suvidhaImg1 from '../assets/Suvidha Plaza/Gallery/SUVIDHA_IMG1.webp'
+import suvidhaImg2 from '../assets/Suvidha Plaza/Gallery/SUVIDHA_IMG2.webp'
+import suvidhaImg3 from '../assets/Suvidha Plaza/Gallery/SUVIDHA_IMG3.webp'
+import suvidhaImg4 from '../assets/Suvidha Plaza/Gallery/SUVIDHA_IMG4.webp'
+import suvidhaImg5 from '../assets/Suvidha Plaza/Gallery/SUVIDHA_IMG5.webp'
+
+// Signature Tower
+import signatureOverview from '../assets/Signature Tower/Gallery/SIGNATURE_IMG1.webp'
+import signatureImg1 from '../assets/Signature Tower/Gallery/SIGNATURE_IMG1.webp'
+import signatureImg2 from '../assets/Signature Tower/Gallery/SIGNATURE_IMG2.webp'
+import signatureImg3 from '../assets/Signature Tower/Gallery/SIGNATURE_IMG3.webp'
+
+// Partners
+import partner1Img from '../assets/Partner_1.jpeg'
+import partner2Img from '../assets/Partner_2.jpeg'
+
+// Video URL Resolver
+import { resolveVideoUrl } from '../utils/videoResolver'
+
 // ── Company Information ──
 export const company = {
   name: "Shri Radhika Developers",
@@ -118,6 +154,18 @@ export const projects = [
         alt: "Raghavpuram residential colony overview",
       },
 
+      overviewVideo: {
+        id: "01",
+        label: "Overview Film",
+        blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/Raghavpuram%20Video.mp4",
+        localSrc: "/src/assets/project1/Videos/Raghavpuram Video.mp4",
+        src: resolveVideoUrl({
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/Raghavpuram%20Video.mp4",
+          localSrc: "/src/assets/project1/Videos/Raghavpuram Video.mp4",
+        }),
+        poster: raghavpuramOverview,
+      },
+
       gallery: [
         {
           type: "image",
@@ -149,14 +197,161 @@ export const projects = [
       videos: [
         {
           id: "01",
-          label: "Project Film",
-          src: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/vid1.mp4",
-          poster: null,
+          label: "Arrival Avenue",
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/raghavpuram_vid1.MP4",
+          localSrc: "/src/assets/project1/Videos/raghavpuram_vid1.MP4",
+          src: resolveVideoUrl({
+            blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/raghavpuram_vid1.MP4",
+            localSrc: "/src/assets/project1/Videos/raghavpuram_vid1.MP4",
+          }),
+          poster: raghavpuramImg1,
+        },
+        {
+          id: "02",
+          label: "Avenue Walkthrough",
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/raghavpuram_vid2.MP4",
+          localSrc: "/src/assets/project1/Videos/raghavpuram_vid2.MP4",
+          src: resolveVideoUrl({
+            blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/raghavpuram_vid2.MP4",
+            localSrc: "/src/assets/project1/Videos/raghavpuram_vid2.MP4",
+          }),
+          poster: raghavpuramImg2,
+        },
+        {
+          id: "03",
+          label: "Colony Aerial Tour",
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/raghavpuram_vid3.MP4",
+          localSrc: "/src/assets/project1/Videos/raghavpuram_vid3.MP4",
+          src: resolveVideoUrl({
+            blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/raghavpuram_vid3.MP4",
+            localSrc: "/src/assets/project1/Videos/raghavpuram_vid3.MP4",
+          }),
+          poster: raghavpuramImg4,
         },
       ],
 
       location: {
         address: "शुगर मिल बाईपास, रणखण्डी पुलिस चौकी के सामने, निकट रूप गार्डन, देवबन्द",
+        description: null,
+        coordinates: {
+          lat: 29.673940,
+          lng: 77.662027,
+        },
+        mapsUrl: "https://maps.google.com/?q=29.673940,77.662027",
+      },
+    },
+
+    contact: {
+      phones: [
+        "7983948531",
+        "9259562820",
+        "9997065799",
+      ],
+    },
+  },
+  {
+    id: "03",
+    number: "02",
+
+    developer: "Shree Radhika Developers",
+    brand: "SRD — Residential",
+
+    name: "Vrindavan Vihar",
+    category: "Residential Gated Colony",
+    location: "Near Government Hospital, Deoband",
+    status: "Booking Open",
+    description:
+      "An approved gated residential colony designed for healthy and secure community living with dedicated parks and modern amenities.",
+
+    overview: {
+      tagline: "Thoughtfully Planned Residential Living with Modern Community Amenities.",
+      promotionalLine:
+        "Fully gated residential community featuring dedicated open gym, landscaped parks, and direct highway proximity.",
+    },
+
+    facts: {
+      totalPlots: "Approved Layout",
+      plotType: "Residential Gated Colony",
+      roadWidth: "2-3 KM to Highway",
+    },
+
+    features: [
+      "Approved Layout Plan",
+      "Fully Gated Colony",
+      "Triple S Security System",
+      "Prime Location — Near Government Hospital",
+      "Excellent Connectivity — Just 2–3 KM from Saharanpur-Nakur-Kurukshetra Highway",
+      "Dedicated Park & Open Gym Facilities",
+    ],
+
+    media: {
+      overview: {
+        type: "image",
+        src: vrindavanOverview,
+        alt: "Vrindavan Vihar residential colony overview",
+      },
+
+      overviewVideo: {
+        id: "01",
+        label: "Overview Film",
+        blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/VRIDAVAN%20VIHAR_VID1.mp4",
+        localSrc: "/src/assets/Vrindavan Vihar/Videos/VRIDAVAN VIHAR_VID1.mp4",
+        src: resolveVideoUrl({
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/VRIDAVAN%20VIHAR_VID1.mp4",
+          localSrc: "/src/assets/Vrindavan Vihar/Videos/VRIDAVAN VIHAR_VID1.mp4",
+        }),
+        poster: vrindavanOverview,
+      },
+
+      gallery: [
+        {
+          type: "image",
+          src: vrindavanImg1,
+          alt: "Vrindavan Vihar panoramic master layout",
+        },
+        {
+          type: "image",
+          src: vrindavanImg2,
+          alt: "Vrindavan Vihar wide paved internal avenues",
+        },
+        {
+          type: "image",
+          src: vrindavanImg3,
+          alt: "Vrindavan Vihar landscaped residential surroundings",
+        },
+        {
+          type: "image",
+          src: vrindavanImg4,
+          alt: "Vrindavan Vihar plotted sector development",
+        },
+        {
+          type: "image",
+          src: vrindavanImg5,
+          alt: "Vrindavan Vihar open expanse and infrastructure",
+        },
+        {
+          type: "image",
+          src: vrindavanImg6,
+          alt: "Vrindavan Vihar gated entrance approach",
+        },
+      ],
+
+      videos: [
+        {
+          id: "01",
+          label: "Colony Walkthrough",
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/VRINDAVAN%20VIHAR_VID2.mp4",
+          localSrc: "/src/assets/Vrindavan Vihar/Videos/VRINDAVAN VIHAR_VID2.mp4",
+          src: resolveVideoUrl({
+            blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/VRINDAVAN%20VIHAR_VID2.mp4",
+            localSrc: "/src/assets/Vrindavan Vihar/Videos/VRINDAVAN VIHAR_VID2.mp4",
+          }),
+          poster: vrindavanImg4,
+        },
+      ],
+
+      location: {
+        address: "निकट सरकारी अस्पताल, देवबंद, सहारनपुर",
         description: null,
         coordinates: {
           lat: null,
@@ -175,231 +370,352 @@ export const projects = [
     },
   },
   {
-    id: "02",
-    number: "02",
-
-    developer: "Shree Radhika Developers",
-    brand: "SRD — Since 2005",
-
-    name: "Project Name",
-    category: "Commercial Development",
-    location: "Location",
-    status: "Ongoing",
-    description:
-      "A commercial development positioned to serve growing demand in an emerging location.",
-
-    overview: {
-      tagline: null,
-      promotionalLine: null,
-    },
-
-    facts: {
-      totalPlots: null,
-      plotType: null,
-      roadWidth: null,
-    },
-
-    features: [],
-
-    media: {
-      overview: {
-        type: "image",
-        src: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project exterior view",
-      },
-
-      gallery: [
-        {
-          type: "image",
-          src: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200",
-          alt: "Project exterior view",
-        },
-        {
-          type: "image",
-          src: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=1200",
-          alt: "Project interior view",
-        },
-        {
-          type: "image",
-          src: "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&q=80&w=1200",
-          alt: "Architectural detail",
-        },
-      ],
-
-      videos: [
-        {
-          id: "01",
-          label: "Project Film",
-          src: null,
-          poster: null,
-        },
-      ],
-
-      location: {
-        address: "Location",
-        description: null,
-        coordinates: {
-          lat: null,
-          lng: null,
-        },
-        mapsUrl: null,
-      },
-    },
-
-    contact: {
-      phones: [],
-    },
-  },
-  {
-    id: "03",
+    id: "04",
     number: "03",
 
     developer: "Shree Radhika Developers",
-    brand: "SRD — Since 2005",
+    brand: "SRD — Commercial",
 
-    name: "Project Name",
-    category: "Mixed-Use Development",
-    location: "Location",
-    status: "Completed",
+    name: "Suvidha Plaza",
+    category: "Commercial Complex",
+    location: "Deoband, Saharanpur",
+    status: "Ongoing",
     description:
-      "An integrated development combining residential and commercial spaces within a thoughtfully planned environment.",
+      "A strategically planned commercial plaza featuring 57 premium shops, wide circulation corridors, and dedicated customer parking.",
 
     overview: {
-      tagline: null,
-      promotionalLine: null,
+      tagline: "57 Premium Commercial Shops with Approved Layout and Dedicated Parking.",
+      promotionalLine:
+        "Prime commercial location engineered for high visibility, wide road access, and flourishing retail enterprise.",
     },
 
     facts: {
-      totalPlots: null,
-      plotType: null,
-      roadWidth: null,
+      totalPlots: "57",
+      plotType: "Commercial Shops",
+      roadWidth: "30 ft & 25 ft",
     },
 
-    features: [],
+    features: [
+      "Prime Commercial Location",
+      "Approved Layout Plan",
+      "Wide 30ft & 25ft Roads",
+      "Dedicated Parking Space",
+      "57 Premium Commercial Shops",
+    ],
 
     media: {
       overview: {
         type: "image",
-        src: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project exterior view",
+        src: suvidhaOverview,
+        alt: "Suvidha Plaza commercial elevation overview",
+      },
+
+      overviewVideo: {
+        id: "01",
+        label: "Overview Film",
+        blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SUVIDHAVID1_h264.mp4",
+        // H.264 re-encode — original SUVIDHAVID1.MP4 was HEVC/H.265 (hvc1), unsupported in Chromium
+        localSrc: "/src/assets/Suvidha Plaza/Videos/converted/SUVIDHAVID1_h264.mp4",
+        src: resolveVideoUrl({
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SUVIDHAVID1_h264.mp4",
+          localSrc: "/src/assets/Suvidha Plaza/Videos/converted/SUVIDHAVID1_h264.mp4",
+        }),
+        poster: suvidhaOverview,
       },
 
       gallery: [
         {
           type: "image",
-          src: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200",
-          alt: "Project exterior view",
+          src: suvidhaImg1,
+          alt: "Suvidha Plaza main commercial elevation",
         },
         {
           type: "image",
-          src: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200",
-          alt: "Project interior view",
+          src: suvidhaImg2,
+          alt: "Suvidha Plaza wide architectural perspective",
         },
         {
           type: "image",
-          src: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80&w=1200",
-          alt: "Architectural detail",
+          src: suvidhaImg3,
+          alt: "Suvidha Plaza retail frontage",
+        },
+        {
+          type: "image",
+          src: suvidhaImg4,
+          alt: "Suvidha Plaza shopping arcade and access roads",
+        },
+        {
+          type: "image",
+          src: suvidhaImg5,
+          alt: "Suvidha Plaza parking area and road approach",
         },
       ],
 
       videos: [
         {
           id: "01",
-          label: "Project Film",
-          src: null,
-          poster: null,
+          label: "Drone Tour",
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SUVIDHAVID2_h264.mp4",
+          // H.264 re-encode — original HEVC/H.265 file not supported in Chromium
+          localSrc: "/src/assets/Suvidha Plaza/Videos/converted/SUVIDHAVID2_h264.mp4",
+          src: resolveVideoUrl({
+            blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SUVIDHAVID2_h264.mp4",
+            localSrc: "/src/assets/Suvidha Plaza/Videos/converted/SUVIDHAVID2_h264.mp4",
+          }),
+          poster: suvidhaImg3,
+        },
+        {
+          id: "02",
+          label: "Site Inspection",
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SUVIDHAVID3_h264.mp4",
+          // H.264 re-encode — original HEVC/H.265 file not supported in Chromium
+          localSrc: "/src/assets/Suvidha Plaza/Videos/converted/SUVIDHAVID3_h264.mp4",
+          src: resolveVideoUrl({
+            blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SUVIDHAVID3_h264.mp4",
+            localSrc: "/src/assets/Suvidha Plaza/Videos/converted/SUVIDHAVID3_h264.mp4",
+          }),
+          poster: suvidhaImg5,
+        },
+        {
+          id: "03",
+          label: "Showcase Reel",
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SUVIDHAVID4_h264.mp4",
+          // H.264 re-encode — original HEVC/H.265 file not supported in Chromium
+          // SUVIDHAVID4_h264.mp4 conversion running in background; will play once complete
+          localSrc: "/src/assets/Suvidha Plaza/Videos/converted/SUVIDHAVID4_h264.mp4",
+          src: resolveVideoUrl({
+            blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SUVIDHAVID4_h264.mp4",
+            localSrc: "/src/assets/Suvidha Plaza/Videos/converted/SUVIDHAVID4_h264.mp4",
+          }),
+          poster: suvidhaImg2,
         },
       ],
 
       location: {
-        address: "Location",
+        address: "Deoband, Saharanpur, Uttar Pradesh",
         description: null,
         coordinates: {
-          lat: null,
-          lng: null,
+          lat: 29.703945,
+          lng: 77.687599,
         },
-        mapsUrl: null,
+        mapsUrl: "https://maps.google.com/?q=29.703945,77.687599",
       },
     },
 
     contact: {
-      phones: [],
+      phones: [
+        "7983948531",
+        "9259562820",
+        "9997065799",
+      ],
     },
   },
   {
-    id: "04",
+    id: "05",
     number: "04",
 
     developer: "Shree Radhika Developers",
-    brand: "SRD — Since 2005",
+    brand: "SRD — Commercial",
 
-    name: "Project Name",
-    category: "Residential Development",
-    location: "Location",
-    status: "Upcoming",
+    name: "Signature Tower",
+    category: "Commercial Complex",
+    location: "Hanuman Chowk, Deoband",
+    status: "Ongoing",
     description:
-      "An upcoming residential project focused on modern living and sustainable community design.",
+      "A prominent commercial landmark at Hanuman Chowk, home to a dedicated mobile and electronics market with exceptional customer footfall.",
 
     overview: {
-      tagline: null,
-      promotionalLine: null,
+      tagline: "High-Footfall Commercial Hub at Hanuman Chowk.",
+      promotionalLine:
+        "A landmark commercial development hosting a dedicated electronics market in Deoband's prime retail hub.",
     },
 
     facts: {
-      totalPlots: null,
-      plotType: null,
-      roadWidth: null,
+      totalPlots: "Prime Landmark",
+      plotType: "Electronics Market",
+      roadWidth: "Hanuman Chowk",
     },
 
-    features: [],
+    features: [
+      "Prime Commercial Location — Hanuman Chowk, Deoband",
+      "Dedicated Mobile & Electronics Market",
+      "High Customer Footfall",
+      "Excellent Market Connectivity",
+      "Premium Commercial Shops",
+    ],
 
     media: {
       overview: {
         type: "image",
-        src: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200",
-        alt: "Project exterior view",
+        src: signatureOverview,
+        alt: "Signature Tower commercial high-rise overview",
+      },
+
+      overviewVideo: {
+        id: "01",
+        label: "Overview Film",
+        blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SIGNATURE_VID1.mp4",
+        localSrc: "/src/assets/Signature Tower/Videos/SIGNATURE_VID1.mp4",
+        src: resolveVideoUrl({
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SIGNATURE_VID1.mp4",
+          localSrc: "/src/assets/Signature Tower/Videos/SIGNATURE_VID1.mp4",
+        }),
+        poster: signatureOverview,
       },
 
       gallery: [
         {
           type: "image",
-          src: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200",
-          alt: "Project exterior view",
+          src: signatureImg1,
+          alt: "Signature Tower facade at Hanuman Chowk",
         },
         {
           type: "image",
-          src: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&q=80&w=1200",
-          alt: "Project interior view",
+          src: signatureImg2,
+          alt: "Signature Tower retail floors and street frontage",
         },
         {
           type: "image",
-          src: "https://images.unsplash.com/photo-1600573472592-401b489a3cdc?auto=format&fit=crop&q=80&w=1200",
-          alt: "Architectural detail",
+          src: signatureImg3,
+          alt: "Signature Tower commercial arcade",
         },
       ],
 
       videos: [
         {
           id: "01",
-          label: "Project Film",
-          src: null,
-          poster: null,
+          label: "Arcade Tour",
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SIGNATURE_VID2.mp4",
+          localSrc: "/src/assets/Signature Tower/Videos/SIGNATURE_VID2.mp4",
+          src: resolveVideoUrl({
+            blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/SIGNATURE_VID2.mp4",
+            localSrc: "/src/assets/Signature Tower/Videos/SIGNATURE_VID2.mp4",
+          }),
+          poster: signatureImg2,
         },
       ],
 
       location: {
-        address: "Location",
+        address: "हनुमान चौक, देवबंद, सहारनपुर, उत्तर प्रदेश",
         description: null,
         coordinates: {
-          lat: null,
-          lng: null,
+          lat: 29.693697,
+          lng: 77.678909,
         },
-        mapsUrl: null,
+        mapsUrl: "https://maps.google.com/?q=29.693697,77.678909",
       },
     },
 
     contact: {
-      phones: [],
+      phones: [
+        "7983948531",
+        "9259562820",
+        "9997065799",
+      ],
+    },
+  },
+  {
+    id: "02",
+    number: "05",
+
+    developer: "Shree Radhika Developers",
+    brand: "SRD — Commercial",
+
+    name: "City Complex",
+    category: "Commercial Complex",
+    location: "Deoband, Saharanpur",
+    status: "Ongoing",
+    description:
+      "A premier commercial complex offering modern business infrastructure, ample parking, and strategic market positioning.",
+
+    overview: {
+      tagline: "Modern Commercial Infrastructure in the Heart of the Market.",
+      promotionalLine:
+        "Strategically located commercial spaces designed for high daily footfall and lasting business value.",
+    },
+
+    facts: {
+      totalPlots: "800-1000 Daily Footfall",
+      plotType: "Commercial Complex",
+      roadWidth: "Wide Planned Roads",
+    },
+
+    features: [
+      "Prime Commercial Location",
+      "Wide & Well-Planned Roads",
+      "Ample Parking Space",
+      "Triple S Security System",
+      "800–1000 Daily Footfall",
+    ],
+
+    media: {
+      overview: {
+        type: "image",
+        src: cityComplexOverview,
+        alt: "City Complex commercial development overview",
+      },
+
+      overviewVideo: {
+        id: "01",
+        label: "Overview Film",
+        blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/CITY_COMPLEX_VID1.mp4",
+        localSrc: "/src/assets/City Complex/Videos/CITY_COMPLEX_VID1.mp4",
+        src: resolveVideoUrl({
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/CITY_COMPLEX_VID1.mp4",
+          localSrc: "/src/assets/City Complex/Videos/CITY_COMPLEX_VID1.mp4",
+        }),
+        poster: cityComplexOverview,
+      },
+
+      gallery: [
+        {
+          type: "image",
+          src: cityComplexImg1,
+          alt: "City Complex commercial elevation",
+        },
+        {
+          type: "image",
+          src: cityComplexImg2,
+          alt: "City Complex facade and road approach",
+        },
+        {
+          type: "image",
+          src: cityComplexImg3,
+          alt: "City Complex architectural view",
+        },
+      ],
+
+      videos: [
+        {
+          id: "01",
+          label: "Walkthrough Reel",
+          blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/CITY_COMPLEX_VID2.mp4",
+          localSrc: "/src/assets/City Complex/Videos/CITY_COMPLEX_VID2.mp4",
+          src: resolveVideoUrl({
+            blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/CITY_COMPLEX_VID2.mp4",
+            localSrc: "/src/assets/City Complex/Videos/CITY_COMPLEX_VID2.mp4",
+          }),
+          poster: cityComplexImg2,
+        },
+      ],
+
+      location: {
+        address: "Deoband, Saharanpur, Uttar Pradesh",
+        description: null,
+        coordinates: {
+          lat: 29.697498,
+          lng: 77.684799,
+        },
+        mapsUrl: "https://maps.google.com/?q=29.697498,77.684799",
+      },
+    },
+
+    contact: {
+      phones: [
+        "7983948531",
+        "9259562820",
+        "9997065799",
+      ],
     },
   },
 ];
@@ -421,40 +737,59 @@ export const vision = {
     "Shri Radhika Developers was founded on the principle that real estate should create lasting value — for investors, for communities, and for the future. We are committed to thoughtful development that balances growth with quality.",
 };
 
-// ── Strategic Partners ──
+// ── Leadership & Partners ──
 export const partners = [
   {
     id: "01",
     number: "01",
-    name: "Aarav Mehta",
-    role: "Investment Strategist",
-    focus: "Capital direction & opportunity mapping",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=1200",
+    name: "Mr. Ashutosh Gupta",
+    role: "Director",
+    designation: "Director",
+    experience: "25+ Years of Experience in Real Estate & Construction.",
+    image: partner1Img,
+    alt: "Mr. Ashutosh Gupta — Director, Shri Radhika Developers",
     description:
-      "Aarav works with us on identifying the right opportunities, balancing future upside with disciplined execution, and ensuring every decision aligns with long-term value creation.",
-    qualities: ["Portfolio view", "Market fit", "Risk discipline"],
+      "Mr. Ashutosh Gupta is the driving force behind Shri Radhika Developers. As a co-founder and partner, he brings vision, dedication, and hands-on leadership to every project.\n\nWith a strong focus on quality, integrity, and customer satisfaction, he ensures that every space we create is built to inspire and stand the test of time.",
+    qualities: [
+      {
+        title: "Personalized Involvement",
+        description: "Actively involved in every step to ensure the best outcomes.",
+      },
+      {
+        title: "Quality & Integrity",
+        description: "Delivering excellence through high standards and honest practices.",
+      },
+      {
+        title: "Commitment to Relationships",
+        description: "Believes in building long-term relationships based on trust.",
+      },
+    ],
   },
   {
     id: "02",
     number: "02",
-    name: "Naina Shah",
-    role: "Design & Planning Lead",
-    focus: "Concept direction & community relevance",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=1200",
+    name: "Mr. Nitish Goyal",
+    role: "Chairperson",
+    designation: "Chairperson",
+    experience: "5+ Years of Experience in Real Estate & Construction.",
+    image: partner2Img,
+    alt: "Mr. Nitish Goyal — Chairperson, Shri Radhika Developers",
     description:
-      "Naina leads planning and design conversations that shape how spaces function in real life — ensuring each development is both beautiful and thoughtful for the communities it serves.",
-    qualities: ["Place-making", "Planning insight", "Design rigor"],
-  },
-  {
-    id: "03",
-    number: "03",
-    name: "Rohan Kapoor",
-    role: "Development Partner",
-    focus: "Execution strategy & delivery",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=1200",
-    description:
-      "Rohan brings a practical approach to delivery, aligning design intent with build realities and helping keep the vision grounded in strong execution and measurable outcomes.",
-    qualities: ["Execution", "Delivery", "Operational clarity"],
+      "Mr. Nitish Goyal plays a key role in driving Shri Radhika Developers towards newer heights. With his dedication, vision, and dynamic approach, he contributes to building spaces that create long-term value for our clients.",
+    qualities: [
+      {
+        title: "Client-Centric Approach",
+        description: "Focused on delivering the best value for every customer.",
+      },
+      {
+        title: "Growth & Innovation",
+        description: "Brings fresh ideas and energy to every new development.",
+      },
+      {
+        title: "Commitment & Integrity",
+        description: "Believes in building trust and lasting relationships.",
+      },
+    ],
   },
 ];
 

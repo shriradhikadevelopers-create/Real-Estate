@@ -55,6 +55,18 @@ function App() {
 
   useSectionFocus()
 
+  // Ensure full browser reload always starts cleanly at the top of the website
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual'
+      }
+      if (!window.location.hash) {
+        window.scrollTo(0, 0)
+      }
+    }
+  }, [])
+
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReducedMotion || !progressRef.current) return

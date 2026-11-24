@@ -89,33 +89,58 @@ const translations = {
 
     /* ── Partners ───────────────────────────────────────────────────── */
     partners: {
-      eyebrow: 'Strategic Partners',
-      headline: 'Trusted by long-term thinkers.',
+      eyebrow: 'Leadership & Partners',
+      headline: 'Built on vision, dedication, and trust.',
+      qualitiesHeading: 'Key Qualities',
       previous: '← Previous',
       next: 'Next →',
 
       // Partner data keyed by partner id
-      // Names are proper nouns and are NOT translated
       p01: {
-        role: 'Investment Strategist',
-        focus: 'Capital direction & opportunity mapping',
+        name: 'Mr. Ashutosh Gupta',
+        shortName: 'Ashutosh Gupta',
+        role: 'Director',
+        designation: 'Director',
+        experience: '25+ Years of Experience in Real Estate & Construction.',
         description:
-          'Aarav works with us on identifying the right opportunities, balancing future upside with disciplined execution, and ensuring every decision aligns with long-term value creation.',
-        qualities: ['Portfolio view', 'Market fit', 'Risk discipline'],
+          'Mr. Ashutosh Gupta is the driving force behind Shri Radhika Developers. As a co-founder and partner, he brings vision, dedication, and hands-on leadership to every project.\n\nWith a strong focus on quality, integrity, and customer satisfaction, he ensures that every space we create is built to inspire and stand the test of time.',
+        qualities: [
+          {
+            title: 'Personalized Involvement',
+            description: 'Actively involved in every step to ensure the best outcomes.',
+          },
+          {
+            title: 'Quality & Integrity',
+            description: 'Delivering excellence through high standards and honest practices.',
+          },
+          {
+            title: 'Commitment to Relationships',
+            description: 'Believes in building long-term relationships based on trust.',
+          },
+        ],
       },
       p02: {
-        role: 'Design & Planning Lead',
-        focus: 'Concept direction & community relevance',
+        name: 'Mr. Nitish Goyal',
+        shortName: 'Nitish Goyal',
+        role: 'Chairperson',
+        designation: 'Chairperson',
+        experience: '5+ Years of Experience in Real Estate & Construction.',
         description:
-          'Naina leads planning and design conversations that shape how spaces function in real life — ensuring each development is both beautiful and thoughtful for the communities it serves.',
-        qualities: ['Place-making', 'Planning insight', 'Design rigor'],
-      },
-      p03: {
-        role: 'Development Partner',
-        focus: 'Execution strategy & delivery',
-        description:
-          'Rohan brings a practical approach to delivery, aligning design intent with build realities and helping keep the vision grounded in strong execution and measurable outcomes.',
-        qualities: ['Execution', 'Delivery', 'Operational clarity'],
+          'Mr. Nitish Goyal plays a key role in driving Shri Radhika Developers towards newer heights. With his dedication, vision, and dynamic approach, he contributes to building spaces that create long-term value for our clients.',
+        qualities: [
+          {
+            title: 'Client-Centric Approach',
+            description: 'Focused on delivering the best value for every customer.',
+          },
+          {
+            title: 'Growth & Innovation',
+            description: 'Brings fresh ideas and energy to every new development.',
+          },
+          {
+            title: 'Commitment & Integrity',
+            description: 'Believes in building trust and lasting relationships.',
+          },
+        ],
       },
     },
 
@@ -166,7 +191,7 @@ const translations = {
       videoUnavailable: 'Video unavailable',
       videoLoading: 'Loading video...',
 
-      // Per-project translatable content — keyed by project id (p01, p02, p03, p04)
+      // Per-project translatable content — keyed by project id (p01, p02, p03, p04, p05)
       // Structural fields (id, facts, media, contact, etc.) stay in siteData.js
       p01: {
         name: 'Raghavpuram',
@@ -197,28 +222,121 @@ const translations = {
         ],
       },
       p02: {
-        name: 'Project Name',
-        category: 'Commercial Development',
-        location: 'Location',
+        name: 'City Complex',
+        category: 'Commercial Complex',
+        location: 'Deoband, Saharanpur',
+        locality: 'Deoband',
+        region: 'Saharanpur, Uttar Pradesh',
         status: 'Ongoing',
         description:
-          'A commercial development positioned to serve growing demand in an emerging location.',
+          'A premier commercial complex offering modern business infrastructure, ample parking, and strategic market positioning.',
+        brand: 'SRD — Commercial',
+        developer: 'Shree Radhika Developers',
+        tagline: 'Modern Commercial Infrastructure in the Heart of the Market.',
+        promotionalLine:
+          'Strategically located commercial spaces designed for high daily footfall and lasting business value.',
+        bookingMessage: '',
+        facts: {
+          plotsValue: '800-1000',
+          plotsLabel: 'Daily Footfall',
+          roadsValue: 'Wide Roads',
+          roadsLabel: 'Planned Access',
+        },
+        features: [
+          'Prime Commercial Location',
+          'Wide & Well-Planned Roads',
+          'Ample Parking Space',
+          'Triple S Security System',
+          '800–1000 Daily Footfall',
+        ],
       },
       p03: {
-        name: 'Project Name',
-        category: 'Mixed-Use Development',
-        location: 'Location',
-        status: 'Completed',
+        name: 'Vrindavan Vihar',
+        category: 'Residential Gated Colony',
+        location: 'Near Government Hospital, Deoband',
+        locality: 'Deoband',
+        region: 'Saharanpur, Uttar Pradesh',
+        status: 'Booking Open',
         description:
-          'An integrated development combining residential and commercial spaces within a thoughtfully planned environment.',
+          'An approved gated residential colony designed for healthy and secure community living with dedicated parks and modern amenities.',
+        brand: 'SRD — Residential',
+        developer: 'Shree Radhika Developers',
+        tagline: 'Thoughtfully Planned Residential Living with Modern Community Amenities.',
+        promotionalLine:
+          'Fully gated residential community featuring dedicated open gym, landscaped parks, and direct highway proximity.',
+        bookingMessage: '',
+        facts: {
+          plotsValue: 'Approved',
+          plotsLabel: 'Layout Plan',
+          roadsValue: '2-3 KM',
+          roadsLabel: 'Highway Access',
+        },
+        features: [
+          'Approved Layout Plan',
+          'Fully Gated Colony',
+          'Triple S Security System',
+          'Prime Location — Near Government Hospital',
+          'Excellent Connectivity — Just 2–3 KM from Saharanpur-Nakur-Kurukshetra Highway',
+          'Dedicated Park & Open Gym Facilities',
+        ],
       },
       p04: {
-        name: 'Project Name',
-        category: 'Residential Development',
-        location: 'Location',
-        status: 'Upcoming',
+        name: 'Suvidha Plaza',
+        category: 'Commercial Complex',
+        location: 'Deoband, Saharanpur',
+        locality: 'Deoband',
+        region: 'Saharanpur, Uttar Pradesh',
+        status: 'Ongoing',
         description:
-          'An upcoming residential project focused on modern living and sustainable community design.',
+          'A strategically planned commercial plaza featuring 57 premium shops, wide circulation corridors, and dedicated customer parking.',
+        brand: 'SRD — Commercial',
+        developer: 'Shree Radhika Developers',
+        tagline: '57 Premium Commercial Shops with Approved Layout and Dedicated Parking.',
+        promotionalLine:
+          'Prime commercial location engineered for high visibility, wide road access, and flourishing retail enterprise.',
+        bookingMessage: '',
+        facts: {
+          plotsValue: '57',
+          plotsLabel: 'Commercial Shops',
+          roadsValue: '30 & 25 ft',
+          roadsLabel: 'Wide Roads',
+        },
+        features: [
+          'Prime Commercial Location',
+          'Approved Layout Plan',
+          'Wide 30ft & 25ft Roads',
+          'Dedicated Parking Space',
+          '57 Premium Commercial Shops',
+        ],
+      },
+      p05: {
+        name: 'Signature Tower',
+        category: 'Commercial Complex',
+        location: 'Hanuman Chowk, Deoband',
+        locality: 'Deoband',
+        region: 'Saharanpur, Uttar Pradesh',
+        status: 'Ongoing',
+        description:
+          'A prominent commercial landmark at Hanuman Chowk, home to a dedicated mobile and electronics market with exceptional customer footfall.',
+        brand: 'SRD — Commercial',
+        developer: 'Shree Radhika Developers',
+        tagline: 'High-Footfall Commercial Hub at Hanuman Chowk.',
+        promotionalLine:
+          'A landmark commercial development hosting a dedicated electronics market in Deoband\'s prime retail hub.',
+        bookingMessage: '',
+        facts: {
+          plotsValue: 'Prime',
+          plotsLabel: 'Hanuman Chowk',
+          roadsValue: 'High',
+          roadsLabel: 'Customer Footfall',
+        },
+        features: [
+          'Prime Commercial Location — Hanuman Chowk, Deoband',
+          'Dedicated Mobile & Electronics Market',
+          'High Customer Footfall',
+          'Excellent Market Connectivity',
+          'Premium Commercial Shops',
+        ],
       },
     },
 
@@ -400,31 +518,57 @@ const translations = {
 
     /* ── Partners ───────────────────────────────────────────────────── */
     partners: {
-      eyebrow: 'रणनीतिक भागीदार',
-      headline: 'दीर्घकालिक सोच रखने वालों का विश्वास।',
+      eyebrow: 'नेतृत्व एवं भागीदार',
+      headline: 'दृष्टि, समर्पण और विश्वास की नींव।',
+      qualitiesHeading: 'प्रमुख नेतृत्व गुण',
       previous: '← पिछला',
       next: 'अगला →',
 
       p01: {
-        role: 'निवेश रणनीतिकार',
-        focus: 'पूंजी दिशा एवं अवसर मानचित्रण',
+        name: 'श्री आशुतोष गुप्ता',
+        shortName: 'आशुतोष गुप्ता',
+        role: 'निदेशक',
+        designation: 'निदेशक',
+        experience: 'रियल एस्टेट एवं निर्माण में 25+ वर्षों का अनुभव।',
         description:
-          'आरव हमारे साथ सही अवसरों की पहचान करने, भविष्य की संभावनाओं और अनुशासित क्रियान्वयन के बीच संतुलन बनाने, तथा यह सुनिश्चित करने में काम करते हैं कि हर निर्णय दीर्घकालिक मूल्य निर्माण के अनुरूप हो।',
-        qualities: ['पोर्टफोलियो दृष्टि', 'बाज़ार अनुकूलन', 'जोखिम अनुशासन'],
+          'श्री आशुतोष गुप्ता श्री राधिका डेवलपर्स के मुख्य प्रेरक स्तंभ हैं। एक सह-संस्थापक और भागीदार के रूप में, वे प्रत्येक परियोजना में दृष्टि, समर्पण और सक्रिय नेतृत्व लाते हैं।\n\nगुणवत्ता, सत्यनिष्ठा और ग्राहक संतुष्टि पर गहन ध्यान देने के साथ, वे सुनिश्चित करते हैं कि हमारे द्वारा निर्मित प्रत्येक स्थान प्रेरणादायी हो और समय की कसौटी पर खरा उतरे।',
+        qualities: [
+          {
+            title: 'सक्रिय व्यक्तिगत सहभागिता',
+            description: 'सर्वश्रेष्ठ परिणाम सुनिश्चित करने के लिए हर चरण में सक्रिय रूप से जुड़े रहते हैं।',
+          },
+          {
+            title: 'गुणवत्ता एवं सत्यनिष्ठा',
+            description: 'उच्च मानकों और निष्पक्ष कार्यप्रणाली के माध्यम से उत्कृष्टता प्रदान करना।',
+          },
+          {
+            title: 'संबंधों के प्रति प्रतिबद्धता',
+            description: 'विश्वास पर आधारित दीर्घकालिक संबंधों के निर्माण में विश्वास रखते हैं।',
+          },
+        ],
       },
       p02: {
-        role: 'डिज़ाइन एवं योजना प्रमुख',
-        focus: 'अवधारणा दिशा एवं सामुदायिक प्रासंगिकता',
+        name: 'श्री नितीश गोयल',
+        shortName: 'नितीश गोयल',
+        role: 'चेयरपर्सन',
+        designation: 'चेयरपर्सन',
+        experience: 'रियल एस्टेट एवं निर्माण में 5+ वर्षों का अनुभव।',
         description:
-          'नैना योजना और डिज़ाइन की बातचीत का नेतृत्व करती हैं जो यह आकार देती हैं कि स्थान वास्तविक जीवन में कैसे कार्य करते हैं — यह सुनिश्चित करते हुए कि प्रत्येक विकास सुंदर और समुदायों के लिए विचारशील हो।',
-        qualities: ['स्थान-निर्माण', 'योजना अंतर्दृष्टि', 'डिज़ाइन कठोरता'],
-      },
-      p03: {
-        role: 'विकास भागीदार',
-        focus: 'क्रियान्वयन रणनीति एवं डिलीवरी',
-        description:
-          'रोहन डिलीवरी के लिए एक व्यावहारिक दृष्टिकोण लाते हैं, डिज़ाइन के इरादे को निर्माण वास्तविकताओं के साथ जोड़ते हैं और दृष्टि को मज़बूत क्रियान्वयन और मापनीय परिणामों में स्थापित रखने में मदद करते हैं।',
-        qualities: ['क्रियान्वयन', 'डिलीवरी', 'परिचालन स्पष्टता'],
+          'श्री नितीश गोयल श्री राधिका डेवलपर्स को नई ऊंचाइयों की ओर ले जाने में महत्वपूर्ण भूमिका निभाते हैं। अपने समर्पण, दूरदृष्टि और गतिशील दृष्टिकोण के साथ, वे ऐसे स्थानों के निर्माण में योगदान देते हैं जो हमारे ग्राहकों के लिए दीर्घकालिक मूल्य का निर्माण करते हैं।',
+        qualities: [
+          {
+            title: 'ग्राहक-केंद्रित दृष्टिकोण',
+            description: 'प्रत्येक ग्राहक के लिए सर्वोत्तम मूल्य प्रदान करने पर केंद्रित।',
+          },
+          {
+            title: 'विकास एवं नवाचार',
+            description: 'प्रत्येक नए विकास में नए विचार और ऊर्जा का समावेश करते हैं।',
+          },
+          {
+            title: 'प्रतिबद्धता एवं सत्यनिष्ठा',
+            description: 'विश्वास और स्थायी संबंधों के निर्माण में विश्वास रखते हैं।',
+          },
+        ],
       },
     },
 
@@ -475,7 +619,7 @@ const translations = {
       videoUnavailable: 'वीडियो अनुपलब्ध है',
       videoLoading: 'वीडियो लोड हो रहा है...',
 
-      // Per-project translatable content — keyed by project id (p01–p04)
+      // Per-project translatable content — keyed by project id (p01–p05)
       // Structural fields (id, facts, media, contact, etc.) stay in siteData.js
       p01: {
         name: 'राघवपुरम',
@@ -506,28 +650,121 @@ const translations = {
         ],
       },
       p02: {
-        name: 'परियोजना का नाम',
-        category: 'व्यावसायिक विकास',
-        location: 'स्थान',
+        name: 'सिटी कॉम्प्लेक्स',
+        category: 'व्यावसायिक कॉम्प्लेक्स',
+        location: 'देवबंद, सहारनपुर',
+        locality: 'देवबंद',
+        region: 'सहारनपुर, उत्तर प्रदेश',
         status: 'जारी',
         description:
-          'एक उभरते क्षेत्र में बढ़ती मांग को पूरा करने के लिए स्थापित एक व्यावसायिक विकास परियोजना।',
+          'आधुनिक व्यापारिक बुनियादी ढांचे, पर्याप्त पार्किंग और रणनीतिक बाजार स्थिति वाला एक प्रमुख व्यावसायिक परिसर।',
+        brand: 'एसआरडी — व्यावसायिक',
+        developer: 'श्री राधिका डेवलपर्स',
+        tagline: 'बाजार के केंद्र में आधुनिक व्यावसायिक बुनियादी ढांचा।',
+        promotionalLine:
+          'उच्च दैनिक आवागमन और स्थायी व्यावसायिक मूल्य के लिए रणनीतिक रूप से स्थित व्यावसायिक स्थल।',
+        bookingMessage: '',
+        facts: {
+          plotsValue: '800-1000',
+          plotsLabel: 'दैनिक फुटफॉल',
+          roadsValue: 'चौड़ी सड़कें',
+          roadsLabel: 'सुगम मार्ग',
+        },
+        features: [
+          'प्रमुख व्यावसायिक स्थान',
+          'चौड़ी एवं सुनियोजित सड़कें',
+          'पर्याप्त पार्किंग स्थान',
+          'ट्रिपल एस सुरक्षा प्रणाली',
+          '800–1000 दैनिक फुटफॉल',
+        ],
       },
       p03: {
-        name: 'परियोजना का नाम',
-        category: 'मिश्रित-उपयोग विकास',
-        location: 'स्थान',
-        status: 'पूर्ण',
+        name: 'वृंदावन विहार',
+        category: 'आवासीय गेटेड कॉलोनी',
+        location: 'निकट सरकारी अस्पताल, देवबंद',
+        locality: 'देवबंद',
+        region: 'सहारनपुर, उत्तर प्रदेश',
+        status: 'बुकिंग खुली है',
         description:
-          'एक सुनियोजित परिवेश में आवासीय और व्यावसायिक स्थानों को एकीकृत करने वाला एक समग्र विकास।',
+          'समर्पित पार्कों और आधुनिक सुविधाओं के साथ सुरक्षित और स्वस्थ सामुदायिक जीवन के लिए डिज़ाइन की गई स्वीकृत गेटेड आवासीय कॉलोनी।',
+        brand: 'एसआरडी — आवासीय',
+        developer: 'श्री राधिका डेवलपर्स',
+        tagline: 'आधुनिक सामुदायिक सुविधाओं के साथ सुनियोजित आवासीय जीवन।',
+        promotionalLine:
+          'समर्पित ओपन जिम, सुंदर पार्क और सीधे हाईवे कनेक्टिविटी वाली पूर्णतः गेटेड आवासीय कॉलोनी।',
+        bookingMessage: '',
+        facts: {
+          plotsValue: 'स्वीकृत',
+          plotsLabel: 'लेआउट प्लान',
+          roadsValue: '2-3 किमी',
+          roadsLabel: 'हाईवे कनेक्टिविटी',
+        },
+        features: [
+          'स्वीकृत लेआउट प्लान',
+          'पूर्णतः गेटेड कॉलोनी',
+          'ट्रिपल एस सुरक्षा प्रणाली',
+          'प्रमुख स्थान — सरकारी अस्पताल के निकट',
+          'उत्कृष्ट कनेक्टिविटी — सहारनपुर-नकूड़-कुरुक्षेत्र हाईवे से मात्र 2–3 किमी',
+          'समर्पित पार्क एवं ओपन जिम की सुविधा',
+        ],
       },
       p04: {
-        name: 'परियोजना का नाम',
-        category: 'आवासीय विकास',
-        location: 'स्थान',
-        status: 'आगामी',
+        name: 'सुविधा प्लाज़ा',
+        category: 'व्यावसायिक कॉम्प्लेक्स',
+        location: 'देवबंद, सहारनपुर',
+        locality: 'देवबंद',
+        region: 'सहारनपुर, उत्तर प्रदेश',
+        status: 'जारी',
         description:
-          'आधुनिक जीवनशैली और टिकाऊ सामुदायिक डिज़ाइन पर केंद्रित एक आगामी आवासीय परियोजना।',
+          '57 प्रीमियम दुकानों, चौड़े रास्तों और समर्पित ग्राहक पार्किंग के साथ रणनीतिक रूप से नियोजित व्यावसायिक प्लाज़ा।',
+        brand: 'एसआरडी — व्यावसायिक',
+        developer: 'श्री राधिका डेवलपर्स',
+        tagline: 'स्वीकृत लेआउट और समर्पित पार्किंग के साथ 57 प्रीमियम व्यावसायिक दुकानें।',
+        promotionalLine:
+          'उच्च दृश्यता, चौड़ी सड़कों और फलते-फूलते खुदरा व्यापार के लिए तैयार प्रमुख व्यावसायिक स्थान।',
+        bookingMessage: '',
+        facts: {
+          plotsValue: '57',
+          plotsLabel: 'व्यावसायिक दुकानें',
+          roadsValue: '30 व 25 फीट',
+          roadsLabel: 'चौड़ी सड़कें',
+        },
+        features: [
+          'प्रमुख व्यावसायिक स्थान',
+          'स्वीकृत लेआउट प्लान',
+          'चौड़ी 30 फीट एवं 25 फीट सड़कें',
+          'समर्पित पार्किंग स्थान',
+          '57 प्रीमियम व्यावसायिक दुकानें',
+        ],
+      },
+      p05: {
+        name: 'सिग्नेचर टॉवर',
+        category: 'व्यावसायिक कॉम्प्लेक्स',
+        location: 'हनुमान चौक, देवबंद',
+        locality: 'देवबंद',
+        region: 'सहारनपुर, उत्तर प्रदेश',
+        status: 'जारी',
+        description:
+          'हनुमान चौक पर स्थित एक प्रमुख व्यावसायिक केंद्र, जहां अत्यधिक ग्राहक आवागमन और समर्पित मोबाइल व इलेक्ट्रॉनिक्स मार्केट है।',
+        brand: 'एसआरडी — व्यावसायिक',
+        developer: 'श्री राधिका डेवलपर्स',
+        tagline: 'हनुमान चौक पर अत्यधिक आवागमन वाला प्रमुख व्यावसायिक केंद्र।',
+        promotionalLine:
+          'देवबंद के प्रमुख बाजार केंद्र हनुमान चौक पर समर्पित इलेक्ट्रॉनिक्स मार्केट वाला प्रतिष्ठित व्यावसायिक विकास।',
+        bookingMessage: '',
+        facts: {
+          plotsValue: 'प्रमुख केंद्र',
+          plotsLabel: 'हनुमान चौक',
+          roadsValue: 'अत्यधिक',
+          roadsLabel: 'ग्राहक आवागमन',
+        },
+        features: [
+          'प्रमुख व्यावसायिक स्थान — हनुमान चौक, देवबंद',
+          'समर्पित मोबाइल एवं इलेक्ट्रॉनिक्स मार्केट',
+          'अत्यधिक ग्राहक आवागमन',
+          'उत्कृष्ट बाज़ार कनेक्टिविटी',
+          'प्रीमियम व्यावसायिक दुकानें',
+        ],
       },
     },
 

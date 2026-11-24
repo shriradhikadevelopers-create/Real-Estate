@@ -13,9 +13,6 @@ function Partners({ isActive = false }) {
 const [incomingIndex, setIncomingIndex] = useState(null)
 const [isTransitioning, setIsTransitioning] = useState(false)
   const containerRef = useRef(null)
-  const currentImageRef = useRef(null)
-  const nextImageRef = useRef(null)
-  const contentRef = useRef(null)
   const transitionTimeoutRef = useRef(null)
   const autoplayTimerRef = useRef(null)
   const isHoveredRef = useRef(false)
@@ -23,11 +20,18 @@ const [isTransitioning, setIsTransitioning] = useState(false)
   const touchStartX = useRef(0)
   const touchStartY = useRef(0)
 
-  const { t } = useTranslation()
+  const { t, tArray } = useTranslation()
 
-  // Helper: resolve a per-partner translation key.
-  // Partner names are proper nouns — they always come from siteData, never translated.
+  // Helper: resolve a per-partner translation key with fallback
   const tp = (partnerId, key) => t(`partners.p${partnerId}.${key}`)
+
+  // Helper: resolve qualities array for active partner
+  const getPartnerQualities = (partnerId) => {
+    const qualities = tArray(`partners.p${partnerId}.qualities`)
+    if (Array.isArray(qualities) && qualities.length > 0) return qualities
+    const p = partners.find(item => item.id === partnerId)
+    return p?.qualities || []
+  }
 
   const currentPartner = partners[activeIndex]
 
@@ -90,36 +94,28 @@ const [isTransitioning, setIsTransitioning] = useState(false)
       clearTimeout(transitionTimeoutRef.current)
     }
 
-    const oldImage = currentImageRef.current
-    const newImage = nextImageRef.current
+    const container = containerRef.current
+    const oldImages = container?.querySelectorAll('.partner-stage-image')
+    const newImages = container?.querySelectorAll('.partner-stage-image-next')
+    const contents = container?.querySelectorAll('.partner-content')
 
-    if (!oldImage || !newImage) {
+    if (!oldImages || oldImages.length === 0 || !newImages || newImages.length === 0) {
       setActiveIndex(newIndex)
-      gsap.set(oldImage, {
-        opacity: 1,
-        x: 0,
-        })
-
-        gsap.set(newImage, {
-        opacity: 0,
-        x: 0,
-        })
+      setIncomingIndex(null)
       setIsTransitioning(false)
       return
     }
 
-    const content = contentRef.current
-
     // Animate out current content and image
-    gsap.to(oldImage, {
+    gsap.to(oldImages, {
       opacity: 0,
       x: 30,
       duration: 0.75,
       ease: 'power2.inOut',
     })
 
-    if (content) {
-      gsap.to(content, {
+    if (contents && contents.length > 0) {
+      gsap.to(contents, {
         opacity: 0,
         y: 16,
         duration: 0.65,
@@ -128,8 +124,8 @@ const [isTransitioning, setIsTransitioning] = useState(false)
     }
 
     // Animate in new image from left
-    gsap.set(newImage, { opacity: 0, x: -30 })
-    gsap.to(newImage, {
+    gsap.set(newImages, { opacity: 0, x: -30 })
+    gsap.to(newImages, {
       opacity: 1,
       x: 0,
       duration: 0.85,
@@ -142,9 +138,9 @@ const [isTransitioning, setIsTransitioning] = useState(false)
       setActiveIndex(newIndex)
 
       // Animate in new content after index changes
-      if (content) {
-        gsap.set(content, { opacity: 0, y: 16 })
-        gsap.to(content, {
+      if (contents && contents.length > 0) {
+        gsap.set(contents, { opacity: 0, y: 16 })
+        gsap.to(contents, {
           opacity: 1,
           y: 0,
           duration: 0.75,
@@ -155,6 +151,10 @@ const [isTransitioning, setIsTransitioning] = useState(false)
 
       // Mark transition as complete
       transitionTimeoutRef.current = setTimeout(() => {
+        // Reset primary images to opacity 1, x 0 (they now render the active partner via React)
+        // and reset staging images back to opacity 0, x 0
+        gsap.set(oldImages, { opacity: 1, x: 0 })
+        gsap.set(newImages, { opacity: 0, x: 0 })
         setIncomingIndex(null)
         setIsTransitioning(false)
       }, 850)
@@ -183,7 +183,7 @@ const [isTransitioning, setIsTransitioning] = useState(false)
           scrollTrigger: {
             id: 'partners-intro',
             trigger: containerRef.current,
-            start: isDesktop ? 'top 22%' : 'top 25%',
+            start: isDesktop ? 'top 90%' : 'top 92%',
             toggleActions: 'play none none none',
             invalidateOnRefresh: true,
           },
@@ -197,7 +197,7 @@ const [isTransitioning, setIsTransitioning] = useState(false)
           scrollTrigger: {
             id: 'partners-stage',
             trigger: containerRef.current,
-            start: isDesktop ? 'top 18%' : 'top 20%',
+            start: isDesktop ? 'top 82%' : 'top 85%',
             toggleActions: 'play none none none',
             invalidateOnRefresh: true,
           },
@@ -211,7 +211,7 @@ const [isTransitioning, setIsTransitioning] = useState(false)
           scrollTrigger: {
             id: 'partners-nav',
             trigger: containerRef.current,
-            start: isDesktop ? 'top 15%' : 'top 16%',
+            start: isDesktop ? 'top 75%' : 'top 78%',
             toggleActions: 'play none none none',
             invalidateOnRefresh: true,
           },
@@ -259,14 +259,6 @@ const [isTransitioning, setIsTransitioning] = useState(false)
     }
   }, [])
 
-  // Resolve the qualities array for the active partner via t() by numeric index.
-  // t() already supports array indexing: qualities.0, qualities.1, qualities.2
-  const tpQualities = (partnerId) =>
-    [
-      t(`partners.p${partnerId}.qualities.0`),
-      t(`partners.p${partnerId}.qualities.1`),
-      t(`partners.p${partnerId}.qualities.2`),
-    ].filter((q) => q && !q.startsWith('partners.'))
 
   return (
     <section
@@ -276,7 +268,7 @@ const [isTransitioning, setIsTransitioning] = useState(false)
     >
       <div className="section-focus-wrapper w-full">
       {/* Desktop: ~100vh stage */}
-      <div className="hidden md:block md:min-h-screen flex flex-col justify-center py-20">
+      <div className="hidden md:flex flex-col justify-center md:min-h-screen py-20">
         <div className="container-base">
           {/* Introduction */}
           <div className="partners-section-intro mb-20">
@@ -295,7 +287,7 @@ const [isTransitioning, setIsTransitioning] = useState(false)
             onPointerUp={handlePointerUp}
           >
             {/* Left: Partner information */}
-            <div ref={contentRef} className="flex flex-col space-y-6">
+            <div className="partner-content flex flex-col space-y-5">
               {/* Partner counter */}
               <div className="flex items-center gap-4">
                 <span className="font-mono text-xs tracking-[0.2em] uppercase text-neutral/80">
@@ -303,42 +295,60 @@ const [isTransitioning, setIsTransitioning] = useState(false)
                 </span>
               </div>
 
-              {/* Partner name — proper noun, never translated */}
+              {/* Partner name */}
               <div>
-                <h3 className="font-display text-5xl md:text-6xl text-black leading-none tracking-tight mb-3">
-                  {currentPartner.name}
+                <h3 className="font-display text-4xl sm:text-5xl md:text-5xl lg:text-6xl text-black leading-tight tracking-tight mb-2">
+                  {tp(currentPartner.id, 'name') !== `partners.p${currentPartner.id}.name`
+                    ? tp(currentPartner.id, 'name')
+                    : currentPartner.name}
                 </h3>
 
-                {/* Role */}
-                <p className="font-body text-xs md:text-sm tracking-[0.15em] uppercase text-accent font-medium">
-                  {tp(currentPartner.id, 'role')}
+                {/* Designation */}
+                <p className="font-body text-xs md:text-sm tracking-[0.16em] uppercase text-accent font-medium mb-1.5">
+                  {tp(currentPartner.id, 'designation') !== `partners.p${currentPartner.id}.designation`
+                    ? tp(currentPartner.id, 'designation')
+                    : currentPartner.designation}
+                </p>
+
+                {/* Experience */}
+                <p className="font-body text-xs tracking-[0.15em] uppercase text-neutral/80 font-medium pb-2 border-b border-neutral/15">
+                  {tp(currentPartner.id, 'experience') !== `partners.p${currentPartner.id}.experience`
+                    ? tp(currentPartner.id, 'experience')
+                    : currentPartner.experience}
                 </p>
               </div>
 
-              {/* Focus area */}
-              <p className="font-body text-xs tracking-[0.18em] uppercase text-neutral/70">
-                {tp(currentPartner.id, 'focus')}
-              </p>
+              {/* Biography */}
+              <div className="body-copy max-w-lg text-sm md:text-[15px] leading-relaxed text-black/80 space-y-2.5 pt-1">
+                {(tp(currentPartner.id, 'description') !== `partners.p${currentPartner.id}.description`
+                  ? tp(currentPartner.id, 'description')
+                  : currentPartner.description)
+                  .split('\n\n')
+                  .map((paragraph, pIdx) => (
+                    <p key={pIdx}>{paragraph}</p>
+                  ))}
+              </div>
 
-              {/* Description */}
-              <p className="body-copy max-w-md text-base md:text-lg leading-relaxed pt-4">
-                {tp(currentPartner.id, 'description')}
-              </p>
-
-              {/* Qualities */}
-              <ul className="flex flex-wrap gap-2 pt-4">
-                {tpQualities(currentPartner.id).map((quality) => (
-                  <li
-                    key={quality}
-                    className="rounded-full border border-neutral/30 bg-ivory px-3 py-1.5 text-xs font-medium tracking-[0.12em] uppercase text-black/70"
-                  >
-                    {quality}
-                  </li>
-                ))}
-              </ul>
+              {/* Key Qualities */}
+              <div className="pt-3 border-t border-neutral/20 space-y-2">
+                <p className="eyebrow text-[10px] tracking-widest text-neutral/60 uppercase">
+                  {t('partners.qualitiesHeading')}
+                </p>
+                <div className="space-y-1.5">
+                  {getPartnerQualities(currentPartner.id).map((quality, qIdx) => (
+                    <div key={qIdx} className="flex items-start gap-2 text-xs leading-snug">
+                      <span className="text-accent text-xs select-none shrink-0 mt-0.5" aria-hidden="true">—</span>
+                      <div className="space-y-0.5">
+                        <span className="font-body font-semibold text-black">{quality.title}: </span>
+                        <span className="font-body text-neutral/70">{quality.description}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               {/* Navigation controls */}
-              <div className="flex items-center gap-6 pt-8 border-t border-neutral/20">
+              <div className="flex items-center gap-6 pt-6 border-t border-neutral/20">
                 <button
                   onClick={handlePrevious}
                   disabled={isTransitioning}
@@ -359,57 +369,60 @@ const [isTransitioning, setIsTransitioning] = useState(false)
             </div>
 
             {/* Right: Partner image stage */}
-            <div className="relative h-[600px] rounded-[2rem] overflow-hidden bg-neutral/5 border border-neutral/20 shadow-[0_18px_40px_rgba(23,23,22,0.08)]">
+            <div className="relative w-full max-w-[420px] h-[520px] mx-auto rounded-2xl overflow-hidden bg-neutral/10 border border-neutral/20 shadow-[0_16px_36px_rgba(23,23,22,0.06)]">
               {/* Current image */}
               <img
-                ref={currentImageRef}
                 src={currentPartner.image}
-                alt={currentPartner.name}
-                className="partner-stage-image absolute inset-0 z-10 w-full h-full object-cover object-center"
-                />
+                alt={currentPartner.alt || currentPartner.name}
+                className="partner-stage-image absolute inset-0 z-10 w-full h-full object-cover object-top"
+              />
 
-                <img
-                ref={nextImageRef}
+              <img
                 src={
-  partners[
-    incomingIndex !== null
-      ? incomingIndex
-      : activeIndex
-  ].image
-}
+                  partners[
+                    incomingIndex !== null
+                      ? incomingIndex
+                      : activeIndex
+                  ].image
+                }
                 alt=""
                 aria-hidden="true"
-                className="partner-stage-image-next absolute inset-0 z-0 w-full h-full object-cover object-center opacity-0 pointer-events-none"
-                />
+                className="partner-stage-image-next absolute inset-0 z-0 w-full h-full object-cover object-top opacity-0 pointer-events-none"
+              />
             </div>
           </div>
 
           {/* Partner selector navigation */}
-          <div className="partners-nav-container mt-20 flex flex-wrap gap-12 justify-start">
-            {partners.map((partner, index) => (
-              <button
-                key={partner.id}
-                onClick={() => handleSelectPartner(index)}
-                disabled={isTransitioning}
-                className={`flex flex-col gap-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
-                  index === activeIndex
-                    ? 'opacity-100'
-                    : 'opacity-50 hover:opacity-75'
-                }`}
-                aria-pressed={index === activeIndex}
-                aria-label={`Select ${partner.name}`}
-              >
-                <span className="font-mono text-xs tracking-[0.18em] uppercase font-bold">
-                  {partner.number}
-                </span>
-                <span className="font-body text-xs tracking-[0.12em] uppercase text-black">
-                  {partner.name.split(' ')[0]}
-                </span>
-                {index === activeIndex && (
-                  <span className="w-6 h-px bg-black mt-1" />
-                )}
-              </button>
-            ))}
+          <div className="partners-nav-container mt-16 flex flex-wrap gap-12 justify-start">
+            {partners.map((partner, index) => {
+              const partnerShortName = tp(partner.id, 'shortName') !== `partners.p${partner.id}.shortName`
+                ? tp(partner.id, 'shortName')
+                : partner.name
+              return (
+                <button
+                  key={partner.id}
+                  onClick={() => handleSelectPartner(index)}
+                  disabled={isTransitioning}
+                  className={`flex flex-col gap-1.5 transition-all duration-300 text-left disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${
+                    index === activeIndex
+                      ? 'opacity-100'
+                      : 'opacity-50 hover:opacity-75'
+                  }`}
+                  aria-pressed={index === activeIndex}
+                  aria-label={`Select ${partnerShortName}`}
+                >
+                  <span className="font-mono text-xs tracking-[0.18em] uppercase font-bold text-black">
+                    {partner.number}
+                  </span>
+                  <span className="font-body text-xs tracking-[0.12em] uppercase text-black font-medium">
+                    {partnerShortName}
+                  </span>
+                  {index === activeIndex && (
+                    <span className="w-8 h-px bg-black mt-0.5" />
+                  )}
+                </button>
+              )
+            })}
           </div>
         </div>
       </div>
@@ -440,61 +453,75 @@ const [isTransitioning, setIsTransitioning] = useState(false)
           >
             {/* Image stage */}
             <div
-              className="partners-stage relative w-full h-[300px] sm:h-[360px] rounded-2xl overflow-hidden bg-neutral/5 border border-neutral/20 mb-6 touch-pan-y"
+              className="partners-stage relative w-full max-w-[320px] h-[340px] sm:h-[380px] mx-auto rounded-xl overflow-hidden bg-neutral/10 border border-neutral/20 mb-6 touch-pan-y shadow-xs"
             >
               <img
-              ref={currentImageRef}
-              src={currentPartner.image}
-              alt={currentPartner.name}
-              className="partner-stage-image relative z-10 w-full h-full object-cover object-center"
+                src={currentPartner.image}
+                alt={currentPartner.alt || currentPartner.name}
+                className="partner-stage-image relative z-10 w-full h-full object-cover object-top"
               />
 
               <img
-    ref={nextImageRef}
-   src={
-    partners[
-      incomingIndex !== null
-        ? incomingIndex
-        : activeIndex
-    ].image
-  }
-    alt=""
-    aria-hidden="true"
-    className="partner-stage-image-next absolute inset-0 z-0 w-full h-full object-cover object-center opacity-0 pointer-events-none"
-  />
+                src={
+                  partners[
+                    incomingIndex !== null
+                      ? incomingIndex
+                      : activeIndex
+                  ].image
+                }
+                alt=""
+                aria-hidden="true"
+                className="partner-stage-image-next absolute inset-0 z-0 w-full h-full object-cover object-top opacity-0 pointer-events-none"
+              />
             </div>
 
             {/* Partner content */}
-            <div ref={contentRef} className="space-y-4 mb-8">
+            <div className="partner-content space-y-4 mb-8">
               <div>
-                {/* Partner name — proper noun, never translated */}
-                <h3 className="font-display text-2xl sm:text-3xl text-black leading-tight mb-2">
-                  {currentPartner.name}
+                <h3 className="font-display text-2xl sm:text-3xl text-black leading-tight mb-1">
+                  {tp(currentPartner.id, 'name') !== `partners.p${currentPartner.id}.name`
+                    ? tp(currentPartner.id, 'name')
+                    : currentPartner.name}
                 </h3>
-                <p className="font-body text-xs tracking-[0.15em] uppercase text-accent font-medium">
-                  {tp(currentPartner.id, 'role')}
+                <p className="font-body text-xs tracking-[0.16em] uppercase text-accent font-medium mb-1">
+                  {tp(currentPartner.id, 'designation') !== `partners.p${currentPartner.id}.designation`
+                    ? tp(currentPartner.id, 'designation')
+                    : currentPartner.designation}
+                </p>
+                <p className="font-body text-[11px] tracking-[0.14em] uppercase text-neutral/80 font-medium pb-2 border-b border-neutral/15">
+                  {tp(currentPartner.id, 'experience') !== `partners.p${currentPartner.id}.experience`
+                    ? tp(currentPartner.id, 'experience')
+                    : currentPartner.experience}
                 </p>
               </div>
 
-              <p className="font-body text-xs tracking-[0.18em] uppercase text-neutral/70">
-                {tp(currentPartner.id, 'focus')}
-              </p>
-
-              <p className="body-copy text-sm leading-relaxed">
-                {tp(currentPartner.id, 'description')}
-              </p>
+              <div className="body-copy text-xs sm:text-sm leading-relaxed text-black/80 space-y-2 pt-1">
+                {(tp(currentPartner.id, 'description') !== `partners.p${currentPartner.id}.description`
+                  ? tp(currentPartner.id, 'description')
+                  : currentPartner.description)
+                  .split('\n\n')
+                  .map((paragraph, pIdx) => (
+                    <p key={pIdx}>{paragraph}</p>
+                  ))}
+              </div>
 
               {/* Qualities */}
-              <ul className="flex flex-wrap gap-2 pt-2">
-                {tpQualities(currentPartner.id).map((quality) => (
-                  <li
-                    key={quality}
-                    className="rounded-full border border-neutral/30 bg-ivory px-2.5 py-1 text-[10px] font-medium tracking-[0.1em] uppercase text-black/70"
-                  >
-                    {quality}
-                  </li>
-                ))}
-              </ul>
+              <div className="pt-3 border-t border-neutral/20 space-y-2">
+                <p className="eyebrow text-[9px] tracking-widest text-neutral/60 uppercase">
+                  {t('partners.qualitiesHeading')}
+                </p>
+                <div className="space-y-1.5">
+                  {getPartnerQualities(currentPartner.id).map((quality, qIdx) => (
+                    <div key={qIdx} className="flex items-start gap-1.5 text-[11px] sm:text-xs leading-snug">
+                      <span className="text-accent text-[11px] select-none shrink-0 mt-0.5" aria-hidden="true">—</span>
+                      <div>
+                        <span className="font-semibold text-black">{quality.title}: </span>
+                        <span className="text-neutral/70">{quality.description}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -531,7 +558,7 @@ const [isTransitioning, setIsTransitioning] = useState(false)
                     : 'bg-transparent hover:bg-neutral/10'
                 }`}
                 aria-pressed={index === activeIndex}
-                aria-label={`Select ${partner.name}`}
+                aria-label={`Select ${tp(partner.id, 'name') !== 'partners.p' + partner.id + '.name' ? tp(partner.id, 'name') : partner.name}`}
               >
                 <span className="font-mono text-xs font-bold">
                   {index + 1}

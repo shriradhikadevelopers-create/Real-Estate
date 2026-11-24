@@ -7,7 +7,9 @@ import { useGSAP } from '@gsap/react'
 import { getPostPhilosophyStart } from '../utils/animations'
 import { useTranslation } from '../hooks/useTranslation'
 import ProjectVideoPlayer from '../components/video/ProjectVideoPlayer'
+import ProjectOverviewVideo from '../components/video/ProjectOverviewVideo'
 import ProjectLocationMap from '../components/map/ProjectLocationMap'
+import { resolveVideoUrl, deriveCleanVideoTitle } from '../utils/videoResolver'
 
 gsap.registerPlugin(ScrollTrigger, CustomEase)
 CustomEase.create('premiumReveal', '0.22, 1, 0.36, 1')
@@ -115,7 +117,6 @@ function applyProjectFocusState(container, activeIndex, isActive) {
 
 function Projects({ isActive = false, activeIndex = 0, onSelectProject }) {
   const containerRef = useRef(null)
-  const cursorRef = useRef(null)
   const projectProgressWrapRef = useRef(null)
   const projectProgressLineRef = useRef(null)
   const [activeMedia, setActiveMedia] = useState(
@@ -133,6 +134,10 @@ function Projects({ isActive = false, activeIndex = 0, onSelectProject }) {
   const [activeGallery, setActiveGallery] = useState(
     Object.fromEntries(projects.map(p => [p.id, 0]))
   )
+  const [activeVideo, setActiveVideo] = useState(
+    Object.fromEntries(projects.map(p => [p.id, 0]))
+  )
+  const [openVideoDropdownId, setOpenVideoDropdownId] = useState(null)
   const galleryTouchStartRef = useRef({})
   const previousGalleryRef = useRef({})
   const previousMobileViewRef = useRef(
@@ -155,6 +160,34 @@ function Projects({ isActive = false, activeIndex = 0, onSelectProject }) {
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
   }, [])
+
+  useEffect(() => {
+    if (!openVideoDropdownId) return
+
+    const handlePointerDown = (event) => {
+      if (!event.target.closest('.project-mobile-video-dropdown')) {
+        setOpenVideoDropdownId(null)
+      }
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setOpenVideoDropdownId(null)
+      }
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [openVideoDropdownId])
+
+  useEffect(() => {
+    setOpenVideoDropdownId(null)
+  }, [activeIndex])
 
   // Resolves translatable text for a specific project using project.id as the key.
   // project.id values are "01", "02", "03", "04" — mapped to p01, p02, p03, p04.
@@ -343,7 +376,6 @@ const view = isDesktop
         const metaEls = article.querySelectorAll('.project-meta')
         const descEl = article.querySelector('.project-desc')
         const numberEl = article.querySelector('.project-chapter-number')
-        const mediaNav = article.querySelector('.project-media-nav')
 
         // Chapter number — rises gently from below, leads the article
         if (numberEl) {
@@ -432,23 +464,6 @@ const view = isDesktop
           })
         }
 
-        // Media nav — smallest detail, last to arrive
-        if (mediaNav) {
-          gsap.from(mediaNav, {
-            opacity: 0,
-            y: 8,
-            duration: 0.85,
-            ease: 'power2.out',
-            scrollTrigger: {
-              id: `projects-desktop-nav-${index}`,
-              trigger: mediaNav,
-              start: getPostPhilosophyStart('top 90%'),
-              toggleActions: 'play none none none',
-              invalidateOnRefresh: true,
-            }
-          })
-        }
-
         if (imageWrapper) {
           const currentDesktopImage = () =>
             article.querySelector('.project-desktop-image-inner .project-image')
@@ -465,31 +480,6 @@ const view = isDesktop
           cleanupFns.push(() => {
             imageWrapper.removeEventListener('mouseenter', onEnter)
             imageWrapper.removeEventListener('mouseleave', onLeave)
-          })
-        }
-
-        const cursor = cursorRef.current
-        if (cursor && imageWrapper) {
-          const xTo = gsap.quickTo(cursor, 'x', { duration: 0.35, ease: 'power3' })
-          const yTo = gsap.quickTo(cursor, 'y', { duration: 0.35, ease: 'power3' })
-
-          const onCursorEnter = () => {
-            gsap.to(cursor, { opacity: 1, scale: 1, duration: 0.3 })
-          }
-          const onCursorLeave = () => {
-            gsap.to(cursor, { opacity: 0, scale: 0.7, duration: 0.3 })
-          }
-          const onCursorMove = (e) => {
-            xTo(e.clientX + 16)
-            yTo(e.clientY + 16)
-          }
-          imageWrapper.addEventListener('mouseenter', onCursorEnter)
-          imageWrapper.addEventListener('mouseleave', onCursorLeave)
-          imageWrapper.addEventListener('mousemove', onCursorMove)
-          cleanupFns.push(() => {
-            imageWrapper.removeEventListener('mouseenter', onCursorEnter)
-            imageWrapper.removeEventListener('mouseleave', onCursorLeave)
-            imageWrapper.removeEventListener('mousemove', onCursorMove)
           })
         }
       })
@@ -684,6 +674,7 @@ const view = isDesktop
   }
 
   const handleMobileViewChange = (projectId, view) => {
+    setOpenVideoDropdownId(null)
     if (activeMobileView[projectId] === view || mediaTransitioning[projectId]) return
     swapMediaLayer(projectId, 'mobile', () => {
       setActiveMobileView((prev) => ({ ...prev, [projectId]: view }))
@@ -704,6 +695,10 @@ const view = isDesktop
     }))
   })
 }
+  const handleVideoChange = (projectId, videoIndex) => {
+    setActiveVideo((prev) => ({ ...prev, [projectId]: videoIndex }))
+  }
+
   const handleGalleryChange = (projectId, total, nextIndex) => {
     const next = (nextIndex + total) % total
     if ((activeGallery[projectId] || 0) === next) return
@@ -746,7 +741,11 @@ const view = isDesktop
     const media = project.media || {}
     if (view === 'overview') return media.overview || null
     if (view === 'gallery') return media.gallery || []
-    if (view === 'film') return media.videos?.[0] || null
+    if (view === 'film') {
+      const vids = media.videos || []
+      const currentIdx = Math.min(activeVideo[project.id] || 0, Math.max(0, vids.length - 1))
+      return vids[currentIdx] || null
+    }
     if (view === 'location') return media.location || null
     return media[view] || media.overview || null
   }
@@ -788,7 +787,7 @@ const view = isDesktop
           src={item.src}
           poster={item.poster}
           className={`project-image project-active-media w-full h-full object-cover origin-center ${className}`}
-          autoPlay muted loop playsInline
+          autoPlay loop playsInline
         />
       )
     }
@@ -875,6 +874,20 @@ const view = isDesktop
   const renderMobileView = (project, view, galleryIndex = 0) => {
     const content = getMobileView(project, view)
 
+    if (view === 'overview') {
+      if (isDesktop) return null
+      const isProjectFocused = isActive && projects[activeIndex]?.id === project.id
+      return (
+        <ProjectOverviewVideo
+          video={project.media?.overviewVideo}
+          poster={project.media?.overview?.src}
+          alt={project.media?.overview?.alt || project.name}
+          isActive={isProjectFocused}
+          isOverviewTab={view === 'overview'}
+        />
+      )
+    }
+
     if (view === 'gallery') {
       if (Array.isArray(content) && content.length > 0) {
         const activeIndex = Math.min(galleryIndex, content.length - 1)
@@ -949,14 +962,18 @@ const view = isDesktop
     }
 
     if (view === 'film') {
-      if (content?.src) {
-        if (isDesktop) return null
+      if (isDesktop) return null
+      const videoSrc = resolveVideoUrl(content)
+      const isProjectFocused = isActive && projects[activeIndex]?.id === project.id
+      if (videoSrc) {
+        const currentIdx = activeVideo[project.id] || 0
         return (
           <ProjectVideoPlayer
-            src={content.src}
+            key={`mobile-video-${project.id}-${currentIdx}`}
+            src={videoSrc}
             poster={content.poster}
-            title={`${tp(project.id, 'name')} — ${t('projects.filmLabel')}`}
-            isActiveTab={view === 'film'}
+            title={`${tp(project.id, 'name')} — ${deriveCleanVideoTitle(content)}`}
+            isActiveTab={view === 'film' && isProjectFocused}
           />
         )
       }
@@ -992,7 +1009,17 @@ const view = isDesktop
 
   // Overview
   if (view === 'overview') {
-    return renderMediaItem(content, project)
+    if (!isDesktop) return null
+    const isProjectFocused = isActive && projects[activeIndex]?.id === project.id
+    return (
+      <ProjectOverviewVideo
+        video={project.media?.overviewVideo}
+        poster={project.media?.overview?.src}
+        alt={project.media?.overview?.alt || project.name}
+        isActive={isProjectFocused}
+        isOverviewTab={view === 'overview'}
+      />
+    )
   }
 
   // Gallery
@@ -1095,14 +1122,18 @@ const view = isDesktop
 
   // Video
   if (view === 'film') {
-    if (content?.src) {
-      if (!isDesktop) return null
+    if (!isDesktop) return null
+    const videoSrc = resolveVideoUrl(content)
+    const isProjectFocused = isActive && projects[activeIndex]?.id === project.id
+    if (videoSrc) {
+      const currentIdx = activeVideo[project.id] || 0
       return (
         <ProjectVideoPlayer
-          src={content.src}
+          key={`desktop-video-${project.id}-${currentIdx}`}
+          src={videoSrc}
           poster={content.poster}
-          title={`${tp(project.id, 'name')} — ${t('projects.filmLabel')}`}
-          isActiveTab={view === 'film'}
+          title={`${tp(project.id, 'name')} — ${deriveCleanVideoTitle(content)}`}
+          isActiveTab={view === 'film' && isProjectFocused}
         />
       )
     }
@@ -1146,11 +1177,6 @@ const view = isDesktop
 
   return (
     <>
-      {/* Explore Cursor (Desktop Only) */}
-      <div ref={cursorRef} className="explore-cursor hidden md:block">
-        {t('projects.exploreLabel')}
-      </div>
-
       <div
         ref={projectProgressWrapRef}
         className="project-progress md:hidden fixed top-20 right-5 z-40 opacity-0 pointer-events-none bg-ivory/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-neutral/30 shadow-sm flex flex-col items-end gap-1"
@@ -1191,6 +1217,14 @@ const view = isDesktop
 
               const galleryIndex =
                 activeGallery[project.id] || 0
+
+              const currentVideo =
+                project.media?.videos?.[
+                  Math.min(
+                    activeVideo[project.id] || 0,
+                    Math.max(0, (project.media?.videos?.length || 1) - 1)
+                  )
+                ] || null
 
               const mediaOptions = [
                 ['overview', t('projects.mediaOverview')],
@@ -1246,7 +1280,7 @@ const view = isDesktop
                   <div className="mb-6 md:mb-12 flex items-center gap-4">
                     <div className="overflow-hidden">
                       <span className="project-chapter-number font-display text-4xl md:text-7xl font-medium text-black/10 leading-none block">
-                        {project.id}
+                        {project.number || String(projectIndex + 1).padStart(2, '0')}
                       </span>
                     </div>
                     <div className="flex-1 h-px bg-neutral/20" />
@@ -1258,7 +1292,7 @@ const view = isDesktop
                     <div className="md:col-span-5 md:sticky md:top-32 self-start">
                       {/* Project Number */}
                       <p className="project-meta eyebrow text-neutral mb-3 md:mb-6">
-                        {project.id} / {String(projects.length).padStart(2, '0')}
+                        {project.number || String(projectIndex + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
                       </p>
 
                       {/* Project Name */}
@@ -1353,6 +1387,34 @@ const view = isDesktop
                           </button>
                         ))}
                       </div>
+
+                      {/* Video Sub-Selector (Desktop) */}
+                      {desktopView === 'film' && Array.isArray(project.media?.videos) && project.media.videos.length > 1 && (
+                        <div className="project-video-subnav hidden md:flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-neutral/15">
+                          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-neutral/50 mr-1">
+                            Videos:
+                          </span>
+                          {project.media.videos.map((vid, vIdx) => {
+                            const isVidActive = (activeVideo[project.id] || 0) === vIdx
+                            return (
+                              <button
+                                key={vid.id || vIdx}
+                                type="button"
+                                onClick={() => handleVideoChange(project.id, vIdx)}
+                                className={`px-2.5 py-1 font-mono text-[11px] tracking-wider uppercase transition-all duration-200 rounded-sm border ${
+                                  isVidActive
+                                    ? 'bg-black text-ivory border-black shadow-sm'
+                                    : 'bg-transparent text-neutral/70 border-neutral/30 hover:border-black hover:text-black'
+                                }`}
+                                aria-pressed={isVidActive}
+                              >
+                                <span className="opacity-50 mr-1.5">0{vIdx + 1}</span>
+                                {vid.label || `Film ${vIdx + 1}`}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      )}
                     </div>
 
                     {/* Project Media Column */}
@@ -1377,10 +1439,152 @@ const view = isDesktop
                             </button>
                           ))}
                         </div>
+
+                        {/* Compact Video Dropdown Selector (Mobile) */}
+                        {mobileView === 'film' && Array.isArray(project.media?.videos) && project.media.videos.length > 1 && (
+                          <div
+                            className={`project-mobile-video-dropdown relative mt-3 ${
+                              openVideoDropdownId === project.id ? 'z-40' : 'z-30'
+                            }`}
+                          >
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setOpenVideoDropdownId((prev) =>
+                                  prev === project.id ? null : project.id
+                                )
+                              }
+                              aria-haspopup="listbox"
+                              aria-expanded={openVideoDropdownId === project.id}
+                              aria-label="Select project video"
+                              className={`w-full min-h-[44px] flex items-center justify-between gap-3 px-3.5 py-2.5 bg-ivory border rounded-sm transition-all duration-200 text-left focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black cursor-pointer ${
+                                openVideoDropdownId === project.id
+                                  ? 'border-black ring-1 ring-black/15 shadow-sm'
+                                  : 'border-black/20 hover:border-black/50 active:bg-neutral/10'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <span className="font-mono text-[10px] tracking-widest uppercase px-1.5 py-0.5 bg-black text-ivory rounded-[2px] shrink-0 font-medium">
+                                  0{(activeVideo[project.id] || 0) + 1}
+                                </span>
+                                <span className="font-body text-xs sm:text-[13px] font-medium tracking-tight text-black truncate">
+                                  {currentVideo?.label ||
+                                    deriveCleanVideoTitle(currentVideo) ||
+                                    `Film ${(activeVideo[project.id] || 0) + 1}`}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <span className="font-mono text-[9px] uppercase tracking-wider text-neutral/60">
+                                  0{(activeVideo[project.id] || 0) + 1} / 0{project.media.videos.length}
+                                </span>
+                                <svg
+                                  className={`w-3.5 h-3.5 text-black transition-transform duration-200 ${
+                                    openVideoDropdownId === project.id ? 'rotate-180' : ''
+                                  }`}
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth="2.2"
+                                  aria-hidden="true"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </div>
+                            </button>
+
+                            {/* Dropdown Options */}
+                            {openVideoDropdownId === project.id && (
+                              <div
+                                role="listbox"
+                                aria-label="Project video options"
+                                className="absolute left-0 right-0 top-full mt-1 bg-ivory border border-black/25 rounded-sm shadow-xl z-50 overflow-hidden max-h-60 overflow-y-auto divide-y divide-black/10"
+                              >
+                                {project.media.videos.map((vid, vIdx) => {
+                                  const isVidActive = (activeVideo[project.id] || 0) === vIdx
+                                  const vidTitle =
+                                    vid.label ||
+                                    deriveCleanVideoTitle(vid) ||
+                                    `Film ${vIdx + 1}`
+
+                                  return (
+                                    <button
+                                      key={vid.id || vIdx}
+                                      role="option"
+                                      aria-selected={isVidActive}
+                                      type="button"
+                                      onClick={() => {
+                                        handleVideoChange(project.id, vIdx)
+                                        setOpenVideoDropdownId(null)
+                                      }}
+                                      className={`w-full min-h-[44px] flex items-center justify-between gap-3 px-3.5 py-2.5 text-left transition-colors duration-150 cursor-pointer ${
+                                        isVidActive
+                                          ? 'bg-black text-ivory font-medium'
+                                          : 'bg-ivory text-black/90 hover:bg-black/5 active:bg-black/10'
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-2.5 min-w-0">
+                                        <span
+                                          className={`font-mono text-[10px] tracking-wider uppercase shrink-0 ${
+                                            isVidActive ? 'text-ivory/60' : 'text-neutral/60'
+                                          }`}
+                                        >
+                                          0{vIdx + 1}
+                                        </span>
+                                        <span className="font-body text-xs sm:text-[13px] tracking-tight truncate">
+                                          {vidTitle}
+                                        </span>
+                                      </div>
+                                      {isVidActive ? (
+                                        <span
+                                          className="text-accent text-[11px] font-bold shrink-0 flex items-center gap-1.5 font-mono uppercase tracking-wider"
+                                          aria-hidden="true"
+                                        >
+                                          <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block animate-pulse" />
+                                          Active
+                                        </span>
+                                      ) : (
+                                        <span className="font-mono text-[9px] uppercase tracking-wider text-neutral/45 shrink-0">
+                                          Select
+                                        </span>
+                                      )}
+                                    </button>
+                                  )
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
 
+                      {/* Active Video Title Bar (Desktop & Mobile) */}
+                      {((isDesktop && desktopView === 'film') || (!isDesktop && mobileView === 'film')) &&
+                        Boolean(currentVideo) && (
+                          <div className="project-video-title-bar w-full flex items-center justify-between gap-3 mb-2.5 px-0.5 select-none transition-opacity duration-200">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span
+                                className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0 animate-pulse"
+                                aria-hidden="true"
+                              />
+                              <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-neutral/60 flex-shrink-0">
+                                {project.media?.videos?.length > 1
+                                  ? `Film 0${(activeVideo[project.id] || 0) + 1} / 0${project.media.videos.length}`
+                                  : 'Project Film'}
+                              </span>
+                              <span className="text-neutral/30 font-mono text-[10px]" aria-hidden="true">
+                                /
+                              </span>
+                              <h4 className="font-display text-sm sm:text-base text-black font-medium tracking-tight truncate">
+                                {deriveCleanVideoTitle(currentVideo)}
+                              </h4>
+                            </div>
+                            <span className="hidden sm:inline-block font-mono text-[10px] uppercase tracking-[0.14em] text-neutral/45 flex-shrink-0">
+                              {tp(project.id, 'name')}
+                            </span>
+                          </div>
+                        )}
+
                       {/* Main Image/Media Area */}
-                      <div className="project-image-wrapper relative aspect-[4/3] md:aspect-[16/10] overflow-hidden">
+                      <div className="project-image-wrapper relative w-full aspect-video overflow-hidden">
                         <div className="project-curtain" />
 
                         <div className="project-image-inner project-desktop-image-inner absolute inset-0 hidden md:block">
