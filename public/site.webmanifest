@@ -1,0 +1,23 @@
+{
+  "name": "Shri Radhika Developers",
+  "short_name": "Shri Radhika",
+  "description": "Shri Radhika Developers is a real estate development company based in Deoband, offering residential and commercial developments.",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#F4F1EB",
+  "background_color": "#F4F1EB"
+}
