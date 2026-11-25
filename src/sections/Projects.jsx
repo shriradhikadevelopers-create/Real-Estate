@@ -189,6 +189,63 @@ function Projects({ isActive = false, activeIndex = 0, onSelectProject }) {
     setOpenVideoDropdownId(null)
   }, [activeIndex])
 
+  // Handle URL hash changes (e.g. #project-03 or #project-03-location)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleHash = (options = { shouldScroll: true }) => {
+      const hash = window.location.hash
+      const match = hash.match(/^#project-([0-9a-zA-Z]+)(-location)?$/)
+      if (match) {
+        const projectId = match[1]
+        const isLocation = Boolean(match[2])
+
+        if (isLocation) {
+          setActiveDesktopView((prev) => ({ ...prev, [projectId]: 'location' }))
+          setActiveMobileView((prev) => ({ ...prev, [projectId]: 'location' }))
+        } else {
+          setActiveDesktopView((prev) => ({ ...prev, [projectId]: 'overview' }))
+          setActiveMobileView((prev) => ({ ...prev, [projectId]: 'overview' }))
+        }
+
+        if (options?.shouldScroll) {
+          const targetId = isLocation ? `project-${projectId}-location` : `project-${projectId}`
+          setTimeout(() => {
+            const el = document.getElementById(targetId) || document.getElementById(`project-${projectId}`)
+            if (el) {
+              const headerOffset = 100
+              const elementPosition = el.getBoundingClientRect().top
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth',
+              })
+            }
+          }, 100)
+        }
+      }
+    }
+
+    const isReload =
+      performance.getEntriesByType?.('navigation')?.[0]?.type === 'reload' ||
+      window.performance?.navigation?.type === 1
+
+    // On mount during reload, activate view state without conflicting with reload scroll restoration.
+    // On fresh direct visit with hash, scroll directly to target project anchor.
+    const shouldScrollOnMount = !isReload
+    const timer = setTimeout(() => handleHash({ shouldScroll: shouldScrollOnMount }), 150)
+    const timer2 = setTimeout(() => handleHash({ shouldScroll: shouldScrollOnMount }), 500)
+
+    const onHashChange = () => handleHash({ shouldScroll: true })
+    window.addEventListener('hashchange', onHashChange)
+
+    return () => {
+      clearTimeout(timer)
+      clearTimeout(timer2)
+      window.removeEventListener('hashchange', onHashChange)
+    }
+  }, [])
+
   // Resolves translatable text for a specific project using project.id as the key.
   // project.id values are "01", "02", "03", "04" — mapped to p01, p02, p03, p04.
   // Only text fields (name, category, location, status, description) are resolved.
@@ -1273,8 +1330,9 @@ const view = isDesktop
               return (
                 <article
                   key={project.id}
+                  id={`project-${project.id}`}
                   data-project-id={project.id}
-                  className="project-article relative"
+                  className="project-article relative scroll-mt-28"
                 >
                   {/* Chapter Transition Divider */}
                   <div className="mb-6 md:mb-12 flex items-center gap-4">
@@ -1584,7 +1642,10 @@ const view = isDesktop
                         )}
 
                       {/* Main Image/Media Area */}
-                      <div className="project-image-wrapper relative w-full aspect-video overflow-hidden">
+                      <div
+                        id={`project-${project.id}-location`}
+                        className="project-image-wrapper relative w-full aspect-video overflow-hidden scroll-mt-28"
+                      >
                         <div className="project-curtain" />
 
                         <div className="project-image-inner project-desktop-image-inner absolute inset-0 hidden md:block">

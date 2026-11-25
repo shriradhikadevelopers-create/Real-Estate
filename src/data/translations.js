@@ -72,6 +72,7 @@ const translations = {
     vision: {
       eyebrow: 'Vision & Purpose',
       headlineLines: ['Built on Trust.', 'Driven by Vision.'],
+      exploreProject: 'Explore Project',
       description:
         'Shri Radhika Developers was founded on the principle that real estate should create lasting value — for investors, for communities, and for the future. We are committed to thoughtful development that balances growth with quality.',
       imageFallback: 'Vision Image',
@@ -83,7 +84,7 @@ const translations = {
       // Stat labels (values/numbers are never translated)
       yearsOfExperience: 'Years of Experience',
       developments: 'Developments',
-      acresDeveloped: 'Acres Developed',
+      acresDeveloped: 'Acres of Land Developed',
       locations: 'Locations',
     },
 
@@ -388,6 +389,7 @@ const translations = {
       additionalContactsLabel: 'Additional Contacts',
 
       // Field labels
+      labelProject: 'Project',
       labelName: 'Name *',
       labelPhone: 'Phone *',
       labelEmail: 'Email *',
@@ -395,11 +397,13 @@ const translations = {
       labelMessage: 'Message',
 
       // Placeholders
+      placeholderProject: 'Select a project',
       placeholderName: 'Your name',
       placeholderPhone: 'Your phone number',
       placeholderEmail: 'Your email address',
       placeholderInterestDefault: 'Select an interest',
       placeholderMessage: 'Tell us about your enquiry',
+      noProjectSelected: 'General Enquiry (No specific project)',
 
       // Interest option display labels (value= attrs stay as English in siteData)
       interestGeneral: 'General Enquiry',
@@ -433,18 +437,32 @@ const translations = {
     /* ── Footer ─────────────────────────────────────────────────────── */
     footer: {
       // Section column headings
-      columnLocation: 'Location',
+      columnOverview: 'Company',
+      columnPropertyTypes: 'Property Types',
+      columnNotableProjects: 'Notable Projects',
+      columnLocation: 'Office Address',
       columnContact: 'Contact',
       columnSocial: 'Social',
+
+      // Property type items
+      residentialPlots: 'Residential plots',
+      flats: 'Flats',
+      villas: 'Villas',
+      commercialSpaces: 'Commercial spaces and shops',
+
+      // Overview details
+      experienceBadge: '25+ Years of Experience',
+      operatingSince: 'Operating since 2001',
+      basedIn: 'Based in Deoband',
 
       // Bottom bar — copyright uses siteData footer.copyright which has brand name
       // Translate only the Back to Top button label
       backToTop: 'Back to Top',
 
       // Fallback text when contact data is empty
-      addressFallback: 'Address to be updated',
-      emailFallback: 'Email to be updated',
-      phoneFallback: 'Phone to be updated',
+      addressFallback: 'Balaji Complex, Near Subhash Chowk, Railway Road, Deoband.',
+      emailFallback: 'shriradhikadevelopers@gmail.com',
+      phoneFallback: '+91 80779 23248',
     },
   },
 
@@ -502,6 +520,7 @@ const translations = {
     vision: {
       eyebrow: 'दृष्टि एवं उद्देश्य',
       headlineLines: ['विश्वास पर निर्मित।', 'दृष्टि से प्रेरित।'],
+      exploreProject: 'परियोजना देखें',
       description:
         'श्री राधिका डेवलपर्स की स्थापना इस सिद्धांत पर हुई कि रियल एस्टेट को स्थायी मूल्य बनाना चाहिए — निवेशकों के लिए, समुदायों के लिए और भविष्य के लिए। हम ऐसे विकास के प्रति प्रतिबद्ध हैं जो विकास और गुणवत्ता के बीच संतुलन बनाए।',
       imageFallback: 'दृष्टि चित्र',
@@ -512,7 +531,7 @@ const translations = {
       eyebrow: 'पोर्टफोलियो प्रभाव',
       yearsOfExperience: 'वर्षों का अनुभव',
       developments: 'विकास परियोजनाएं',
-      acresDeveloped: 'एकड़ विकसित',
+      acresDeveloped: 'एकड़ भूमि विकसित',
       locations: 'स्थान',
     },
 
@@ -814,6 +833,7 @@ const translations = {
       additionalContactsLabel: 'अन्य संपर्क',
 
       // Field labels
+      labelProject: 'परियोजना',
       labelName: 'नाम *',
       labelPhone: 'फ़ोन *',
       labelEmail: 'ईमेल *',
@@ -821,11 +841,13 @@ const translations = {
       labelMessage: 'संदेश',
 
       // Placeholders
+      placeholderProject: 'एक परियोजना चुनें',
       placeholderName: 'आपका नाम',
       placeholderPhone: 'आपका फ़ोन नंबर',
       placeholderEmail: 'आपका ईमेल पता',
       placeholderInterestDefault: 'रुचि चुनें',
       placeholderMessage: 'अपनी पूछताछ के बारे में बताएं',
+      noProjectSelected: 'सामान्य पूछताछ (कोई विशिष्ट परियोजना नहीं)',
 
       // Interest option display labels — value= attrs always remain English (from siteData)
       interestGeneral: 'सामान्य पूछताछ',
@@ -859,17 +881,31 @@ const translations = {
     /* ── Footer ─────────────────────────────────────────────────────── */
     footer: {
       // Section column headings
-      columnLocation: 'स्थान',
+      columnOverview: 'कंपनी',
+      columnPropertyTypes: 'संपत्ति के प्रकार',
+      columnNotableProjects: 'प्रमुख परियोजनाएं',
+      columnLocation: 'कार्यालय का पता',
       columnContact: 'संपर्क',
       columnSocial: 'सोशल',
+
+      // Property type items
+      residentialPlots: 'आवासीय भूखंड',
+      flats: 'फ्लैट्स',
+      villas: 'विला',
+      commercialSpaces: 'व्यावसायिक स्थान एवं दुकानें',
+
+      // Overview details
+      experienceBadge: '25+ वर्षों का अनुभव',
+      operatingSince: 'वर्ष 2001 से सेवारत',
+      basedIn: 'देवबंद स्थित',
 
       // Back to Top button
       backToTop: 'शीर्ष पर जाएं',
 
       // Fallback text when contact data is empty
-      addressFallback: 'पता अपडेट किया जाएगा',
-      emailFallback: 'ईमेल अपडेट किया जाएगा',
-      phoneFallback: 'फ़ोन अपडेट किया जाएगा',
+      addressFallback: 'बालाजी कॉम्प्लेक्स, निकट सुभाष चौक, रेलवे रोड, देवबंद।',
+      emailFallback: 'shriradhikadevelopers@gmail.com',
+      phoneFallback: '+91 80779 23248',
     },
   },
 }

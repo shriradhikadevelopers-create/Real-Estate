@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react'
-import { enquiry } from '../data/siteData'
+import { useState, useRef, useEffect } from 'react'
+import { enquiry, contact, projects } from '../data/siteData'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
@@ -7,20 +7,12 @@ import { useTranslation } from '../hooks/useTranslation'
 
 gsap.registerPlugin(ScrollTrigger)
 
-function Enquiry({ project }) {
+function Enquiry({ project, selectedProjectId, onSelectProject }) {
   const containerRef = useRef(null)
   const { t, tArray, language } = useTranslation()
 
-  const phones = Array.isArray(project?.contact?.phones) ? project.contact.phones : []
-  const hasPhones = phones.length > 0
-  const primaryPhone = hasPhones ? phones[0] : null
-  const secondaryPhones = hasPhones ? phones.slice(1) : []
-
-  const projectName = project
-    ? (language === 'hi' && t(`projects.p${project.id}.name`) !== `projects.p${project.id}.name`
-        ? t(`projects.p${project.id}.name`)
-        : project.name)
-    : null
+  const primaryPhone = contact.primaryPhone || '+91 80779 23248'
+  const secondaryPhones = contact.additionalPhones || ['+91 82189 39440', '+91 97593 34767']
 
   // Maps each English interest value (used as <option value=>, sent to backend)
   // to its translated display label. Backend payload is always the English string.
@@ -116,10 +108,27 @@ function Enquiry({ project }) {
     name: '',
     phone: '',
     email: '',
+    projectId: selectedProjectId || '',
     interest: '',
     message: '',
     botcheck: false // Honeypot
   })
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      projectId: selectedProjectId || '',
+    }))
+  }, [selectedProjectId])
+
+  // Active project calculation
+  const activeProjectId = formData.projectId || selectedProjectId || ''
+  const activeProject = activeProjectId ? projects.find((p) => p.id === activeProjectId) : null
+  const projectName = activeProject
+    ? (language === 'hi' && t(`projects.p${activeProject.id}.name`) !== `projects.p${activeProject.id}.name`
+        ? t(`projects.p${activeProject.id}.name`)
+        : activeProject.name)
+    : null
 
   // 'idle' | 'submitting' | 'success' | 'error'
   const [status, setStatus] = useState('idle')
@@ -136,6 +145,15 @@ function Enquiry({ project }) {
     // Clear validation error when user types
     if (validationErrors[name]) {
       setValidationErrors((prev) => ({ ...prev, [name]: '' }))
+    }
+    if (globalError) setGlobalError('')
+  }
+
+  const handleProjectChange = (e) => {
+    const newId = e.target.value
+    setFormData((prev) => ({ ...prev, projectId: newId }))
+    if (onSelectProject) {
+      onSelectProject(newId || null)
     }
     if (globalError) setGlobalError('')
   }
@@ -199,7 +217,7 @@ function Enquiry({ project }) {
           phone: formData.phone,
           interest: formData.interest || 'Not Specified',
           message: formData.message || 'No message provided',
-          project: projectName || 'General Enquiry',
+          project: activeProject ? activeProject.name : 'General Enquiry',
           from_name: 'Shri Radhika Developers Website',
           subject: `New Enquiry from Shri Radhika Developers Website — ${formData.name}`
         })
@@ -213,10 +231,14 @@ function Enquiry({ project }) {
           name: '',
           phone: '',
           email: '',
+          projectId: '',
           interest: '',
           message: '',
           botcheck: false
         })
+        if (onSelectProject) {
+          onSelectProject(null)
+        }
         setValidationErrors({})
       } else {
         setStatus('error')
@@ -255,63 +277,61 @@ function Enquiry({ project }) {
 
         {/* Form Container */}
         <div className="enquiry-form-container max-w-2xl">
-          {/* Project Direct Phone Contacts */}
-          {hasPhones && (
-            <div className="enquiry-project-contact mb-8 md:mb-12 pb-6 md:pb-8 border-b border-neutral/20">
-              {projectName && (
-                <div className="mb-4">
-                  <p className="eyebrow text-accent font-medium mb-1">
-                    {t('enquiry.projectContextLabel')}
-                  </p>
-                  <h3 className="font-display text-2xl sm:text-3xl text-black font-normal">
-                    {projectName}
-                  </h3>
-                </div>
-              )}
-
-              {/* Primary Contact */}
+          {/* Direct Phone Contacts & Project Context */}
+          <div className="enquiry-project-contact mb-8 md:mb-12 pb-6 md:pb-8 border-b border-neutral/20">
+            {projectName && (
               <div className="mb-4">
-                <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-neutral/60 mb-1.5">
-                  {t('enquiry.primaryContactLabel')}
+                <p className="eyebrow text-accent font-medium mb-1">
+                  {t('enquiry.projectContextLabel')}
                 </p>
-                <div className="flex flex-wrap items-baseline gap-3 sm:gap-4">
-                  <a
-                    href={`tel:${primaryPhone}`}
-                    className="enquiry-primary-phone font-display text-2xl sm:text-3xl md:text-4xl text-black hover:text-accent transition-colors font-normal tracking-wide"
-                  >
-                    {primaryPhone}
-                  </a>
-                  <a
-                    href={`tel:${primaryPhone}`}
-                    className="inline-flex items-center gap-1 font-body text-xs tracking-[0.14em] uppercase text-accent hover:text-black transition-colors"
-                  >
-                    <span>{t('enquiry.callNow')}</span>
-                    <span aria-hidden="true">→</span>
-                  </a>
+                <h3 className="font-display text-2xl sm:text-3xl text-black font-normal">
+                  {projectName}
+                </h3>
+              </div>
+            )}
+
+            {/* Primary Contact */}
+            <div className="mb-4">
+              <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-neutral/60 mb-1.5">
+                {t('enquiry.primaryContactLabel')}
+              </p>
+              <div className="flex flex-wrap items-baseline gap-3 sm:gap-4">
+                <a
+                  href={`tel:${primaryPhone.replace(/\s+/g, '')}`}
+                  className="enquiry-primary-phone font-display text-2xl sm:text-3xl md:text-4xl text-black hover:text-accent transition-colors font-normal tracking-wide"
+                >
+                  {primaryPhone}
+                </a>
+                <a
+                  href={`tel:${primaryPhone.replace(/\s+/g, '')}`}
+                  className="inline-flex items-center gap-1 font-body text-xs tracking-[0.14em] uppercase text-accent hover:text-black transition-colors"
+                >
+                  <span>{t('enquiry.callNow')}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Secondary Contacts */}
+            {secondaryPhones.length > 0 && (
+              <div className="pt-3 border-t border-neutral/10">
+                <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-neutral/50 mb-2">
+                  {t('enquiry.additionalContactsLabel')}
+                </p>
+                <div className="flex flex-wrap gap-x-6 gap-y-2">
+                  {secondaryPhones.map((phone) => (
+                    <a
+                      key={phone}
+                      href={`tel:${phone.replace(/\s+/g, '')}`}
+                      className="enquiry-secondary-phone font-mono text-sm sm:text-base text-neutral/70 hover:text-black transition-colors"
+                    >
+                      {phone}
+                    </a>
+                  ))}
                 </div>
               </div>
-
-              {/* Secondary Contacts */}
-              {secondaryPhones.length > 0 && (
-                <div className="pt-3 border-t border-neutral/10">
-                  <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-neutral/50 mb-2">
-                    {t('enquiry.additionalContactsLabel')}
-                  </p>
-                  <div className="flex flex-wrap gap-x-6 gap-y-2">
-                    {secondaryPhones.map((phone) => (
-                      <a
-                        key={phone}
-                        href={`tel:${phone}`}
-                        className="enquiry-secondary-phone font-mono text-sm sm:text-base text-neutral/70 hover:text-black transition-colors"
-                      >
-                        {phone}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+            )}
+          </div>
 
           {status === 'success' ? (
             <div className="py-12 border-t border-black/10">
@@ -418,6 +438,37 @@ function Enquiry({ project }) {
                   disabled={status === 'submitting'}
                   required
                 />
+              </div>
+
+              {/* Project Selection */}
+              <div className="enquiry-field-wrapper fine-divider pb-3 transition-colors duration-300 focus-within:border-black">
+                <label
+                  htmlFor="enquiry-project"
+                  className="eyebrow block mb-2 mt-3 text-neutral/80"
+                >
+                  {t('enquiry.labelProject')}
+                </label>
+                <select
+                  id="enquiry-project"
+                  name="projectId"
+                  value={formData.projectId}
+                  onChange={handleProjectChange}
+                  className="w-full bg-transparent font-body text-base text-black outline-none cursor-pointer"
+                  disabled={status === 'submitting'}
+                >
+                  <option value="">{t('enquiry.placeholderProject')}</option>
+                  {projects.map((p) => {
+                    const pName =
+                      language === 'hi' && t(`projects.p${p.id}.name`) !== `projects.p${p.id}.name`
+                        ? t(`projects.p${p.id}.name`)
+                        : p.name
+                    return (
+                      <option key={p.id} value={p.id}>
+                        {pName}
+                      </option>
+                    )
+                  })}
+                </select>
               </div>
 
               {/* Interest */}

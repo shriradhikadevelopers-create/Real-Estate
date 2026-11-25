@@ -8,7 +8,7 @@
  * company achievements, statistics, or claims.
  */
 
-import raghavpuramOverview from '../assets/project1/overview.jpg'
+// Raghavpuram
 import raghavpuramImg1 from '../assets/project1/Gallery/Screenshot 2026-09-10 224349.png'
 import raghavpuramImg2 from '../assets/project1/Gallery/Screenshot 2026-09-10 224545.png'
 import raghavpuramImg3 from '../assets/project1/Gallery/Screenshot 2026-09-10 224703.png'
@@ -55,8 +55,11 @@ import { resolveVideoUrl } from '../utils/videoResolver'
 export const company = {
   name: "Shri Radhika Developers",
   tagline: "Building Value. Shaping Tomorrow.",
+  experience: "25+ Years",
+  operatingSince: "2001",
+  location: "Deoband",
   description:
-    "A real estate investment and development company focused on identifying opportunity, creating quality developments, and building long-term value across carefully selected locations.",
+    "A real estate investment and development company based in Deoband with 25+ years of experience operating since 2001, focused on identifying opportunity, creating quality developments, and building long-term value across carefully selected locations.",
   vision:
     "We believe in building more than structures — we build futures. Every project is a commitment to quality, long-term value, and the communities we serve.",
 };
@@ -148,11 +151,7 @@ export const projects = [
     ],
 
     media: {
-      overview: {
-        type: "image",
-        src: raghavpuramOverview,
-        alt: "Raghavpuram residential colony overview",
-      },
+      overview: null,
 
       overviewVideo: {
         id: "01",
@@ -163,7 +162,7 @@ export const projects = [
           blobUrl: "https://g24upulnbc6ag6kp.public.blob.vercel-storage.com/Raghavpuram%20Video.mp4",
           localSrc: "/src/assets/project1/Videos/Raghavpuram Video.mp4",
         }),
-        poster: raghavpuramOverview,
+        poster: null,
       },
 
       gallery: [
@@ -243,9 +242,9 @@ export const projects = [
 
     contact: {
       phones: [
-        "7983948531",
-        "9259562820",
-        "9997065799",
+        "+91 80779 23248",
+        "+91 82189 39440",
+        "+91 97593 34767",
       ],
     },
   },
@@ -259,6 +258,11 @@ export const projects = [
     name: "Vrindavan Vihar",
     category: "Residential Gated Colony",
     location: "Near Government Hospital, Deoband",
+    coordinates: {
+      lat: 29.9288889,
+      lng: 77.2983333,
+    },
+    mapsUrl: "https://www.google.com/maps?q=29.9288889,77.2983333",
     status: "Booking Open",
     description:
       "An approved gated residential colony designed for healthy and secure community living with dedicated parks and modern amenities.",
@@ -354,18 +358,18 @@ export const projects = [
         address: "निकट सरकारी अस्पताल, देवबंद, सहारनपुर",
         description: null,
         coordinates: {
-          lat: null,
-          lng: null,
+          lat: 29.9288889,
+          lng: 77.2983333,
         },
-        mapsUrl: null,
+        mapsUrl: "https://www.google.com/maps?q=29.9288889,77.2983333",
       },
     },
 
     contact: {
       phones: [
-        "7983948531",
-        "9259562820",
-        "9997065799",
+        "+91 80779 23248",
+        "+91 82189 39440",
+        "+91 97593 34767",
       ],
     },
   },
@@ -504,9 +508,9 @@ export const projects = [
 
     contact: {
       phones: [
-        "7983948531",
-        "9259562820",
-        "9997065799",
+        "+91 80779 23248",
+        "+91 82189 39440",
+        "+91 97593 34767",
       ],
     },
   },
@@ -608,9 +612,9 @@ export const projects = [
 
     contact: {
       phones: [
-        "7983948531",
-        "9259562820",
-        "9997065799",
+        "+91 80779 23248",
+        "+91 82189 39440",
+        "+91 97593 34767",
       ],
     },
   },
@@ -712,9 +716,9 @@ export const projects = [
 
     contact: {
       phones: [
-        "7983948531",
-        "9259562820",
-        "9997065799",
+        "+91 80779 23248",
+        "+91 82189 39440",
+        "+91 97593 34767",
       ],
     },
   },
@@ -723,10 +727,10 @@ export const projects = [
 // ── Statistics ──
 // numericValue is used for count-up animation; value is the display string
 export const statistics = [
-  { value: "10+", numericValue: null, label: "Years of Experience" },
-  { value: "15", numericValue: null, label: "Developments" },
-  { value: "50+", numericValue: null, label: "Acres Developed" },
-  { value: "19", numericValue: null, label: "Locations" },
+  { value: "25+", numericValue: 25, label: "Years of Experience" },
+  { value: "50+", numericValue: 50, label: "Developments" },
+  { value: "25+", numericValue: 25, label: "Acres of Land Developed" },
+  { value: "40+", numericValue: 40, label: "Locations" },
 ];
 
 // ── Vision / About ──
@@ -813,15 +817,42 @@ export const enquiry = {
 
 // ── Contact Information ──
 export const contact = {
-  phone: "",
-  email: "",
-  address: "",
+  phone: "+91 80779 23248",
+  primaryPhone: "+91 80779 23248",
+  additionalPhones: ["+91 82189 39440", "+91 97593 34767"],
+  email: "shriradhikadevelopers@gmail.com",
+  address: "Balaji Complex, Near Subhash Chowk, Railway Road, Deoband.",
 };
+
+// ── Property Types ──
+export const propertyTypes = [
+  "Residential plots",
+  "Flats",
+  "Villas",
+  "Commercial spaces and shops",
+];
+
+// ── Notable Projects ──
+export const notableProjects = [
+  { id: "01", name: "Raghavpuram", href: "#project-01" },
+  { id: "02", name: "City Complex", href: "#project-02" },
+  { id: "05", name: "Signature Tower", href: "#project-05" },
+  { id: "03", name: "Vrindavan Vihar", href: "#project-03" },
+  { id: "04", name: "Suvidha Plaza", href: "#project-04" },
+];
 
 // ── Social Links ──
 export const socialLinks = [
-  { platform: "Instagram", url: "#", label: "Instagram" },
-  { platform: "LinkedIn", url: "#", label: "LinkedIn" },
+  {
+    platform: "Instagram",
+    url: "https://www.instagram.com/shreeradhikadevelopers/",
+    label: "Instagram",
+  },
+  {
+    platform: "Facebook",
+    url: "https://www.facebook.com/share/1JSNwgcxe3/",
+    label: "Facebook",
+  },
 ];
 
 // ── Footer ──

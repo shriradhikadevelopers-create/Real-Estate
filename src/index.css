@@ -1921,3 +1921,26 @@ html[lang="hi"] .cta-headline {
   color: rgba(244, 241, 235, 0.6) !important;
   text-decoration: none;
 }
+
+/* ── Vision Section Editorial Carousel ── */
+@keyframes visionProgressFill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.vision-progress-active {
+  animation-name: visionProgressFill;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vision-progress-active {
+    animation: none !important;
+    width: 100% !important;
+  }
+}

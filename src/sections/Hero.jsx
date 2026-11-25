@@ -137,7 +137,7 @@ const imgYTo = gsap.quickTo('.hero-image-inner', 'y', {
       const syncInitialScrollState = () => {
         if (initialRestorationDone) return
         const currentScroll = window.scrollY || document.documentElement.scrollTop || 0
-        if (currentScroll > 0) {
+        if (currentScroll > 50) {
           const st = scrollTl.scrollTrigger
           if (st && st.end > st.start) {
             initialRestorationDone = true
@@ -151,7 +151,7 @@ const imgYTo = gsap.quickTo('.hero-image-inner', 'y', {
       syncInitialScrollState()
 
       const onEarlyScroll = () => {
-        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 0) {
+        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 50) {
           syncInitialScrollState()
         }
         if (initialRestorationDone) {
@@ -161,7 +161,7 @@ const imgYTo = gsap.quickTo('.hero-image-inner', 'y', {
       window.addEventListener('scroll', onEarlyScroll, { passive: true })
 
       const rafId = requestAnimationFrame(() => {
-        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 0) {
+        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 50) {
           syncInitialScrollState()
         }
       })
@@ -451,7 +451,7 @@ scrollTl
       const syncInitialScrollState = () => {
         if (initialRestorationDone) return
         const currentScroll = window.scrollY || document.documentElement.scrollTop || 0
-        if (currentScroll > 0) {
+        if (currentScroll > 50) {
           const st = mobileTl.scrollTrigger
           if (st && st.end > st.start) {
             initialRestorationDone = true
@@ -465,7 +465,7 @@ scrollTl
       syncInitialScrollState()
 
       const onEarlyScroll = () => {
-        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 0) {
+        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 50) {
           syncInitialScrollState()
         }
         if (initialRestorationDone) {
@@ -475,7 +475,7 @@ scrollTl
       window.addEventListener('scroll', onEarlyScroll, { passive: true })
 
       const rafId = requestAnimationFrame(() => {
-        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 0) {
+        if (!initialRestorationDone && (window.scrollY || document.documentElement.scrollTop || 0) > 50) {
           syncInitialScrollState()
         }
       })
